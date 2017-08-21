@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#f44336</color>
+    <color name="colorPrimaryDark">#bc362a</color>
+    <color name="colorAccent">#ffc107</color>
+
+    <color name="auteur">#222222</color>
+    <color name="date">#222222</color>
+    <color name="jeuDeMot">#222222</color>
+    <color name="like">#222222</color>
+    <color name="dislike">#222222</color>
 </resources>
