@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -17,16 +16,12 @@ public class JeuDeMotAdapter extends RecyclerView.Adapter<JeuDeMotAdapter.MyView
         public TextView auteur;
         public TextView date;
         public TextView jeuDeMot;
-        public Button like;
-        public Button dislike;
 
         public MyViewHolder(View view) {
             super(view);
             auteur = (TextView) view.findViewById(R.id.auteur);
             date = (TextView) view.findViewById(R.id.date);
             jeuDeMot = (TextView) view.findViewById(R.id.jeuDeMot);
-            like = (Button) view.findViewById(R.id.like);
-            dislike = (Button) view.findViewById(R.id.dislike);
         }
     }
 

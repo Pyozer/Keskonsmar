@@ -5,17 +5,13 @@ import java.util.Date;
 public class JeuDeMot {
 
     private String auteur;
-    private Date date;
+    private String date;
     private String jeuDeMot;
-    private int like;
-    private int dislike;
 
-    public JeuDeMot(String jeuDeMot, String auteur, Date date, int like, int dislike) {
-        this.auteur = auteur;
+    public JeuDeMot(String jeuDeMot, String auteur, String date) {
+        this.auteur = "par " + auteur;
         this.date = date;
         this.jeuDeMot = jeuDeMot;
-        this.like = like;
-        this.dislike = dislike;
     }
 
     public String getAuteur() {
@@ -26,11 +22,11 @@ public class JeuDeMot {
         this.auteur = auteur;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -40,21 +36,5 @@ public class JeuDeMot {
 
     public void setJeuDeMot(String jeuDeMot) {
         this.jeuDeMot = jeuDeMot;
-    }
-
-    public int getLike() {
-        return like;
-    }
-
-    public void setLike(int like) {
-        this.like = like;
-    }
-
-    public int getDislike() {
-        return dislike;
-    }
-
-    public void setDislike(int dislike) {
-        this.dislike = dislike;
     }
 }
