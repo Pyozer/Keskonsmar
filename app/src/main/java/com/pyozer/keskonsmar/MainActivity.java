@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 if(checkInternet()) {
-                    String url = "http://127.0.0.1:8080/Keskonsmar/get_data.php";
+                    String url = "http://127.0.0.1:8080/get_data.php";
                     HttpRequest HttpRequest = new HttpRequest(MainActivity.this);
                     HttpRequest.new DownloadWebpageTask().execute(url, "5000", "5000");
                 } else {
@@ -100,55 +102,71 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prepareData() {
-        JeuDeMot jeuDeMot = new JeuDeMot("Teddy Ficile ggggggg gggggg gggg ggggggggg gggggggggggg gggg gggggg ggggg gggg ggggggggg ggggggggg", "Pyozer", "Il y a 5 minutes");
+        int i = 1;
+        JeuDeMot jeuDeMot = new JeuDeMot(i++, "Teddy Ficile ggggggg gggggg gggg ggggggggg gggggggggggg gggg gggggg ggggg gggg ggggggggg ggggggggg", "Pyozer", "Il y a 5 minutes");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Justin peu trop", "Pyozer", "Il y a 1 jour");
+        jeuDeMot = new JeuDeMot(i++, "Justin peu trop", "Pyozer", "Il y a 1 jour");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Sans 50", "Pyozer", "Il y a 3 jours");
+        jeuDeMot = new JeuDeMot(i++, "Sans 50", "Pyozer", "Il y a 3 jours");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Teddy Ficile ggggggg gggggg gggg ggggggggg gggggggggggg gggg gggggg ggggg gggg ggggggggg ggggggggg", "Pyozer", "Il y a 5 minutes");
+        jeuDeMot = new JeuDeMot(i++, "Teddy Ficile ggggggg gggggg gggg ggggggggg gggggggggggg gggg gggggg ggggg gggg ggggggggg ggggggggg", "Pyozer", "Il y a 5 minutes");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Justin peu trop", "Pyozer", "Il y a 1 jour");
+        jeuDeMot = new JeuDeMot(i++, "Justin peu trop", "Pyozer", "Il y a 1 jour");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Sans 50", "Pyozer", "Il y a 3 jours");
+        jeuDeMot = new JeuDeMot(i++, "Sans 50", "Pyozer", "Il y a 3 jours");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Teddy Ficile ggggggg gggggg gggg ggggggggg gggggggggggg gggg gggggg ggggg gggg ggggggggg ggggggggg", "Pyozer", "Il y a 5 minutes");
+        jeuDeMot = new JeuDeMot(i++, "Teddy Ficile ggggggg gggggg gggg ggggggggg gggggggggggg gggg gggggg ggggg gggg ggggggggg ggggggggg", "Pyozer", "Il y a 5 minutes");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Justin peu trop", "Pyozer", "Il y a 1 jour");
+        jeuDeMot = new JeuDeMot(i++, "Justin peu trop", "Pyozer", "Il y a 1 jour");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Sans 50", "Pyozer", "Il y a 3 jours");
+        jeuDeMot = new JeuDeMot(i++, "Sans 50", "Pyozer", "Il y a 3 jours");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Teddy Ficile ggggggg gggggg gggg ggggggggg gggggggggggg gggg gggggg ggggg gggg ggggggggg ggggggggg", "Pyozer", "Il y a 5 minutes");
+        jeuDeMot = new JeuDeMot(i++, "Teddy Ficile ggggggg gggggg gggg ggggggggg gggggggggggg gggg gggggg ggggg gggg ggggggggg ggggggggg", "Pyozer", "Il y a 5 minutes");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Justin peu trop", "Pyozer", "Il y a 1 jour");
+        jeuDeMot = new JeuDeMot(i++, "Justin peu trop", "Pyozer", "Il y a 1 jour");
         listJeuDeMot.add(jeuDeMot);
 
-        jeuDeMot = new JeuDeMot("Sans 50", "Pyozer", "Il y a 3 jours");
+        jeuDeMot = new JeuDeMot(i++, "Sans 50", "Pyozer", "Il y a 3 jours");
         listJeuDeMot.add(jeuDeMot);
 
         jeuDeMotAdapter.notifyDataSetChanged();
     }
 
     public void loadData(String data) {
-        final ObjectMapper objectMapper = new ObjectMapper();
+
+        data = "[{\"id_jdm\":1,\"text_jdm\":\"Justin peu trop\",\"auteur_jdm\":1,\"date_jdm\":\"2017-08-21 19:10:00\"},{\"id_jdm\":2,\"text_jdm\":\"Sans 50\",\"auteur_jdm\":1,\"date_jdm\":\"2017-08-21 19:20:00\"}]";
         // the better way is to create a custom class with the correct format
         try {
-            final Map<?, ?> decoded = objectMapper.readValue(data, Map.class);
+            listJeuDeMot.clear();
 
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<HashMap> myMap = objectMapper.readValue(data, List.class);
+
+            for(HashMap item : myMap) {
+                int id_jdm = (int) item.get("id_jdm");
+                String text_jdm = String.valueOf(item.get("text_jdm"));
+                String auteur_jdm = String.valueOf(item.get("pseudo_user"));
+                String date_jdm = String.valueOf(item.get("date_jdm"));
+                listJeuDeMot.add(new JeuDeMot(id_jdm, text_jdm, auteur_jdm, date_jdm));
+            }
+
+            jeuDeMotAdapter.notifyDataSetChanged();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     // Permet de vérifier la connexion internet

@@ -1,40 +1,52 @@
 package com.pyozer.keskonsmar;
 
-import java.util.Date;
-
 public class JeuDeMot {
 
-    private String auteur;
-    private String date;
-    private String jeuDeMot;
+    private int id_jdm;
+    private String text_jdm;
+    private String auteur_jdm;
+    private String date_jdm;
 
-    public JeuDeMot(String jeuDeMot, String auteur, String date) {
-        this.auteur = "par " + auteur;
-        this.date = date;
-        this.jeuDeMot = jeuDeMot;
+    public JeuDeMot(int id_jdm, String text_jdm, String auteur_jdm, String date_jdm) {
+        this.id_jdm = id_jdm;
+        this.auteur_jdm = "par " + auteur_jdm;
+        this.date_jdm = date_jdm;
+        this.text_jdm = text_jdm;
+    }
+
+    public int getId() {
+        return id_jdm;
+    }
+
+    public void setId(int id) {
+        this.id_jdm = id;
     }
 
     public String getAuteur() {
-        return auteur;
+        return auteur_jdm;
     }
 
     public void setAuteur(String auteur) {
-        this.auteur = auteur;
+        this.auteur_jdm = auteur;
     }
 
     public String getDate() {
-        return date;
+        return date_jdm;
     }
 
     public void setDate(String date) {
-        this.date = date;
+        this.date_jdm = date;
     }
 
     public String getJeuDeMot() {
-        return jeuDeMot;
+        return text_jdm;
     }
 
     public void setJeuDeMot(String jeuDeMot) {
-        this.jeuDeMot = jeuDeMot;
+        this.text_jdm = jeuDeMot;
+    }
+
+    public String toString() {
+        return text_jdm + " " + auteur_jdm;
     }
 }

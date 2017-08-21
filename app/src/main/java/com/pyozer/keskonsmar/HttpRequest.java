@@ -39,6 +39,8 @@ public class HttpRequest {
         @Override
         protected void onPostExecute(String result) {
             if(mainActivity != null) {
+                mainActivity.swipeRefreshLayout.setRefreshing(false);
+
                 mainActivity.loadData(result);
             }
         }
