@@ -4,4 +4,13 @@
     <string name="title_trending">Tendances</string>
 
     <string name="no_internet">Aucune connexion internet !</string>
+    <string name="error_http">Erreur lors du chargement des données :/</string>
+    <string name="title_activity_login">Connexion</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email ou Pseudo</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_sign_in">Connexion</string>
+    <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
+    <string name="error_field_required">Ce champs de texte est obligatoire</string>
 </resources>

@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private List<JeuDeMot> listJeuDeMot = new ArrayList<>();
 
     private Snackbar snackbar;
-    private boolean SNACKBARSHOW = false;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -90,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
                 if(checkInternet()) {
                     String url = "http://127.0.0.1:8080/get_data.php";
-                    HttpRequest HttpRequest = new HttpRequest(MainActivity.this);
-                    HttpRequest.new DownloadWebpageTask().execute(url, "5000", "5000");
+                    HttpRequest httpRequest = new HttpRequest(MainActivity.this);
+                    httpRequest.execute(url);
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -174,29 +171,36 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if(networkInfo != null && networkInfo.isConnected()) {
-            if(SNACKBARSHOW) { // Si y'avais une snackbar on la supprime
-                snackbar.dismiss();
-            }
+            snackbar.dismiss();
             return true;
         } else {
-            displaySnackbar(findViewById(android.R.id.content), getString(R.string.no_internet));
+            snackbar = Snackbar
+                    .make(findViewById(android.R.id.content), getString(R.string.no_internet), Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Réessayer", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            MainActivity.this.finish();
+                            startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        }
+                    });
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
             return false;
         }
     }
 
-    public void displaySnackbar(View mainactivityLayout, String error) {
-        snackbar = Snackbar
-                .make(mainactivityLayout, error, Snackbar.LENGTH_INDEFINITE)
-                .setAction("Réessayer", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        MainActivity.this.finish();
-                        startActivity(new Intent(MainActivity.this, MainActivity.class));
-                    }
-                });
-        snackbar.setActionTextColor(Color.YELLOW);
+    protected void onPreExecute() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    protected void onPostExecute(String result) {
+        swipeRefreshLayout.setRefreshing(false);
+        loadData(result);
+    }
+
+    protected void doInBackgroundError() {
+        snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_http), Snackbar.LENGTH_LONG);
         snackbar.show();
-        SNACKBARSHOW = true;
     }
 
 }
