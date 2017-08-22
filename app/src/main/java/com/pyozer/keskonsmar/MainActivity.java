@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -50,10 +51,13 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_recent:
-                    //mTextMessage.setText(R.string.title_recent);
+                    // TODO: Faire l'action quand on clique sur Récents
                     return true;
                 case R.id.navigation_trending:
-                    //mTextMessage.setText(R.string.title_trending);
+                    // TODO: Faire l'action quand on clique sur Tendances
+                    return true;
+                case R.id.navigation_versus:
+                    // TODO: Faire l'action quand on clique sur Versus
                     return true;
             }
             return false;
@@ -70,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -120,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                         mListJdm.clear();
 
                         try {
-                            response = response.getJSONArray(0);
+                            //response = response.getJSONArray(0);
 
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject jdmObject = response.getJSONObject(i);
@@ -147,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
 
+                        mSwipeRefreshLayout.setRefreshing(false);
+
                         mSnackbar = Snackbar.make(mMainActivityLayout, getString(R.string.error_http), Snackbar.LENGTH_LONG);
                         mSnackbar.show();
                     }
@@ -161,7 +176,8 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            mSnackbar.dismiss();
+            if(mSnackbar != null)
+                mSnackbar.dismiss();
             return true;
         } else {
             mSnackbar = Snackbar
@@ -179,5 +195,4 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
-
 }

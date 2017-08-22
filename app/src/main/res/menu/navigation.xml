@@ -3,12 +3,17 @@
 
     <item
         android:id="@+id/navigation_recent"
-        android:icon="@drawable/ic_update_black_24dp"
+        android:icon="@drawable/ic_restore_black_24dp"
         android:title="@string/title_recent" />
 
     <item
         android:id="@+id/navigation_trending"
         android:icon="@drawable/ic_whatshot_black_24dp"
         android:title="@string/title_trending" />
+
+    <item
+        android:id="@+id/navigation_versus"
+        android:icon="@drawable/ic_compare_arrows_black_24dp"
+        android:title="@string/title_versus" />
 
 </menu>

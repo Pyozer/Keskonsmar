@@ -3,6 +3,7 @@
     <color name="colorPrimary">#f44336</color>
     <color name="colorPrimaryDark">#bc362a</color>
     <color name="colorAccent">#ffc107</color>
+    <color name="white">#ffffff</color>
 
     <color name="auteur">#222222</color>
     <color name="date">#222222</color>

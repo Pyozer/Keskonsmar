@@ -2,6 +2,7 @@
     <string name="app_name">Keskonsmar</string>
     <string name="title_recent">Derniers ajoutés</string>
     <string name="title_trending">Tendances</string>
+    <string name="title_versus">Versus</string>
 
     <string name="no_internet">Aucune connexion internet !</string>
     <string name="error_http">Erreur lors du chargement des données :/</string>
