@@ -50,3 +50,7 @@
         android:inputType="textMultiLine"
         android:text="Ecrivez votre JDM" />
 </RelativeLayout>
+
+
+
+//JC collectionne les bites
