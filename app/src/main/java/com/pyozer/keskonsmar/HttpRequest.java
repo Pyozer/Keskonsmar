@@ -8,60 +8,71 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HttpRequest {
+public class HttpRequest extends AsyncTask<String, Void, String> {
 
     private MainActivity mainActivity = null;
+    private LoginActivity loginActivity = null;
 
     HttpRequest(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
     }
 
-    class DownloadWebpageTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                return downloadUrl(urls);
-            } catch (IOException e) {
-                if(mainActivity != null) {
-                    return "error";
-                }
-                return null;
-            }
-        }
+    HttpRequest(LoginActivity loginActivity) {
+        this.loginActivity = loginActivity;
+    }
 
-        @Override
-        protected void onPreExecute() {
-            if (mainActivity != null) {
-                mainActivity.swipeRefreshLayout.setRefreshing(true);
-            }
-        }
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            if(mainActivity != null) {
-                mainActivity.swipeRefreshLayout.setRefreshing(false);
+    @Override
+    protected String doInBackground(String... urls) {
+        try {
+            return downloadUrl(urls);
+        } catch (IOException e) {
+            if(mainActivity != null)
+                mainActivity.doInBackgroundError();
+            else if(loginActivity != null)
+                loginActivity.doInBackgroundError();
 
-                mainActivity.loadData(result);
-            }
+            return null;
         }
+    }
+
+    @Override
+    protected void onPreExecute() {
+        if (mainActivity != null)
+            mainActivity.onPreExecute();
+
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        if(mainActivity != null)
+            mainActivity.onPostExecute(result);
+        else if(loginActivity != null)
+            loginActivity.onPostExecute(result);
+
+    }
+
+    @Override
+    protected void onCancelled() {
+        if (loginActivity != null)
+            loginActivity.onCancelled();
     }
 
     /**
      * On effectue la requête et récupère le contenu
      * @param params Paramètres, URL, timeout
      * @return résultat requête
-     * @throws IOException
+     * @throws IOException IOException
      */
     private String downloadUrl(String... params) throws IOException {
         InputStream is = null;
-        String ReadTimeout = params[1];
-        String ConnectTimeout = params[2];
+        int readTimeout = 15000;
+        int connectTimeout = 15000;
 
         try {
             URL url = new URL(params[0]);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(Integer.parseInt(ReadTimeout));
-            conn.setConnectTimeout(Integer.parseInt(ConnectTimeout));
+            conn.setReadTimeout(readTimeout);
+            conn.setConnectTimeout(connectTimeout);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.connect();
@@ -81,7 +92,6 @@ public class HttpRequest {
      * Convertion du InputStream en String.
      * @param is InputStream à convertir
      * @return string
-     * @throws IOException
      */
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
