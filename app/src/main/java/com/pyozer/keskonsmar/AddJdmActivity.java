@@ -11,3 +11,4 @@ public class AddJdmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_jdm);
     }
 }
+//ihobih
