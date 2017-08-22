@@ -1,10 +1,8 @@
 package com.pyozer.keskonsmar;
 
-/**
- * Created by Thecr on 22/08/2017.
- */
-
 public interface Constants {
 
+    String ADDR_SERVER = "http://88.164.230.33/keskonsmar/";
+    int MIN_PASS_LENGTH = 5;
 
 }

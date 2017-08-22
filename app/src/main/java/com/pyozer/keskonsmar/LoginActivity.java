@@ -3,29 +3,29 @@ package com.pyozer.keskonsmar;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A login screen that offers login via email/password.
@@ -35,35 +35,31 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private HttpRequest mAuthTask = null;
+    private JsonObjectRequest mAuthTask = null;
 
     // UI references.
-    private EditText mEmailView;
-    private EditText mPasswordView;
+    private EditText mInputUser;
+    private EditText mInputPassword;
     private View mProgressView;
     private View mLoginFormView;
+
+    private Snackbar mSnackbar;
+
+    private LinearLayout mLoginLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mLoginLayout = (LinearLayout) findViewById(R.id.login_view);
+
         // Set up the login form.
-        mEmailView = (EditText) findViewById(R.id.email);
+        mInputUser = (EditText) findViewById(R.id.login_input_user);
+        mInputPassword = (EditText) findViewById(R.id.login_input_password);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mSubmitButton = (Button) findViewById(R.id.login_action_submit);
+        mSubmitButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -85,27 +81,27 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
+        mInputUser.setError(null);
+        mInputPassword.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        String user = mInputUser.getText().toString();
+        String password = mInputPassword.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password.
         if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
+            mInputPassword.setError(getString(R.string.error_field_required));
+            focusView = mInputPassword;
             cancel = true;
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        if (TextUtils.isEmpty(user)) {
+            mInputUser.setError(getString(R.string.error_field_required));
+            focusView = mInputUser;
             cancel = true;
         }
 
@@ -118,11 +114,62 @@ public class LoginActivity extends AppCompatActivity {
             // perform the user login attempt.
             showProgress(true);
 
-            String url = "http://127.0.0.1:8080/check_login.php?user=" + email + "&pass=" + password;
-            mAuthTask = new HttpRequest(this);
-            mAuthTask.execute(url);
-
+            check_login(user, password);
         }
+    }
+
+    private void check_login(final String user, final String password) {
+
+        String url = Constants.ADDR_SERVER + "check_login.php";
+
+        mAuthTask = new JsonObjectRequest
+                (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // the response is already constructed as a JSONObject!
+                        mAuthTask = null;
+                        showProgress(false);
+
+                        try {
+                            boolean isLoginOk = response.getBoolean("status");
+
+                            if (isLoginOk) {
+                                mSnackbar = Snackbar.make(mLoginLayout, "CONNEXION REUSSI", Snackbar.LENGTH_LONG);
+                                mSnackbar.show();
+                            } else {
+                                mSnackbar = Snackbar.make(mLoginLayout, response.getString("msg"), Snackbar.LENGTH_LONG);
+                                mSnackbar.show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+
+                        mAuthTask = null;
+                        showProgress(false);
+
+                        mSnackbar = Snackbar.make(mLoginLayout, getString(R.string.error_http), Snackbar.LENGTH_LONG);
+                        mSnackbar.show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                // the POST parameters:
+                params.put("user", user);
+                params.put("password", password);
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(mAuthTask);
     }
 
     /**
@@ -160,29 +207,4 @@ public class LoginActivity extends AppCompatActivity {
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-
-    protected void onPostExecute(String success) {
-        mAuthTask = null;
-        showProgress(false);
-
-        if (Boolean.parseBoolean(success)) {
-            finish();
-        } else {
-            mPasswordView.setError(getString(R.string.error_incorrect_password));
-            mPasswordView.requestFocus();
-        }
-    }
-
-    protected void onCancelled() {
-        mAuthTask = null;
-        showProgress(false);
-    }
-
-    protected void doInBackgroundError() {
-        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_http), Snackbar.LENGTH_LONG);
-        snackbar.show();
-    }
-
-
 }
-

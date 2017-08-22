@@ -8,16 +8,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class JeuDeMotAdapter extends RecyclerView.Adapter<JeuDeMotAdapter.MyViewHolder> {
+class JeuDeMotAdapter extends RecyclerView.Adapter<JeuDeMotAdapter.MyViewHolder> {
 
     private List<JeuDeMot> jeuDeMotList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView auteur;
-        public TextView date;
-        public TextView jeuDeMot;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView auteur;
+        TextView date;
+        TextView jeuDeMot;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             auteur = (TextView) view.findViewById(R.id.auteur);
             date = (TextView) view.findViewById(R.id.date);
@@ -25,7 +25,7 @@ public class JeuDeMotAdapter extends RecyclerView.Adapter<JeuDeMotAdapter.MyView
         }
     }
 
-    public JeuDeMotAdapter(List<JeuDeMot> moviesList) {
+    JeuDeMotAdapter(List<JeuDeMot> moviesList) {
         this.jeuDeMotList = moviesList;
     }
 
@@ -41,7 +41,7 @@ public class JeuDeMotAdapter extends RecyclerView.Adapter<JeuDeMotAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         JeuDeMot jeuDeMot = jeuDeMotList.get(position);
         holder.auteur.setText(jeuDeMot.getAuteur());
-        holder.date.setText(jeuDeMot.getDate().toString());
+        holder.date.setText(jeuDeMot.getDate());
         holder.jeuDeMot.setText(jeuDeMot.getJeuDeMot());
     }
 

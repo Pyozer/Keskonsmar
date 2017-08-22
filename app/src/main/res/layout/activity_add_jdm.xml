@@ -4,49 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/add_jdm_layout"
     tools:context="com.pyozer.keskonsmar.AddJdmActivity">
 
-    <Button
-        android:id="@+id/button"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Validé"
-        tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="435dp"
-        android:layout_below="@+id/editText7"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="76dp" />
-
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/add_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nouveau JDM"
+        android:text="@string/add_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        tools:layout_editor_absoluteX="113dp"
-        tools:layout_editor_absoluteY="73dp"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="92dp" />
+        android:layout_above="@id/add_input_jdm"
+        android:layout_marginBottom="90dp" />
 
     <EditText
-        android:id="@+id/editText6"
+        android:id="@+id/add_input_jdm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView"
-        android:layout_below="@+id/button"
-        android:layout_marginTop="87dp"
-        android:ems="10"
-        android:inputType="textMultiLine" />
-
-    <EditText
-        android:id="@+id/editText7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:text="Ecrivez votre JDM" />
+        android:hint="@string/add_input_jdm" />
+
+    <Button
+        android:id="@+id/add_action_submit"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_action_submit"
+        android:layout_below="@id/add_input_jdm"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp" />
+
 </RelativeLayout>
