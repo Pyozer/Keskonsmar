@@ -8,8 +8,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
     private LinearLayout mMainActivityLayout;
 
+    private Fragment fragment;
+    private FragmentManager fragmentManager;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -51,16 +56,18 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_recent:
-                    // TODO: Faire l'action quand on clique sur Récents
-                    return true;
+                    fragment = new LastJDMFragment();
+                    break;
                 case R.id.navigation_trending:
-                    // TODO: Faire l'action quand on clique sur Tendances
-                    return true;
-                case R.id.navigation_versus:
-                    // TODO: Faire l'action quand on clique sur Versus
-                    return true;
+                    fragment = new TrendingJDMFragment();
+                    break;
+                case R.id.navigation_account:
+                    fragment = new AccountFragment();
+                    break;
             }
-            return false;
+            final FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.main_content, fragment).commit();
+            return true;
         }
 
     };
@@ -72,17 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
         mMainActivityLayout = (LinearLayout) findViewById(R.id.main_activity_layout);
 
+        fragmentManager = getSupportFragmentManager();
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -195,4 +195,5 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
+
 }
