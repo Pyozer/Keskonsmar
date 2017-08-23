@@ -72,6 +72,12 @@ public class LoginActivity extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
 
         autolog = getSharedPreferences(Constants.PREF_KEY_ACCOUNT, Context.MODE_PRIVATE);
+
+        String userGetPref = autolog.getString(Constants.PREF_KEY_ACCOUNT_PSEUDO, null);
+        String passGetPref = autolog.getString(Constants.PREF_KEY_ACCOUNT_PASSWORD, null);
+
+        if(userGetPref != null && passGetPref != null)
+            check_login(userGetPref, passGetPref);
     }
 
     /**
