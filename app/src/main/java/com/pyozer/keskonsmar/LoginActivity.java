@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        // Check for a valid email address.
+        // Check for a valid pseudo
         if (TextUtils.isEmpty(user)) {
             mInputUser.setError(getString(R.string.error_field_required));
             focusView = mInputUser;

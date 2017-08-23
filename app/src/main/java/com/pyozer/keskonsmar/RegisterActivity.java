@@ -65,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
         if(user.length() > 0 && pass.length() > 0 && passConf.length() > 0) {
             if(pass.length() >= Constants.MIN_PASS_LENGTH) {
                 if(pass.equals(passConf)) {
-                    // TODO: Faire la requete au serveur
+                    check_register(user , pass);
                 } else {
                     mSnackbar = Snackbar.make(mRegisterLayout, getString(R.string.register_mdp_dif), Snackbar.LENGTH_LONG);
                     mSnackbar.show();
