@@ -3,6 +3,7 @@ package com.pyozer.keskonsmar;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 
@@ -46,6 +47,11 @@ public class LoginActivity extends AppCompatActivity {
     private Snackbar mSnackbar;
 
     private LinearLayout mLoginLayout;
+
+    SharedPreferences autolog;
+    public static final String Log = "Log";
+    public static final String pseudo = "Pseudo";
+    public static final String psw = "Password";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void check_login(final String user, final String password) {
 
-        String url = Constants.ADDR_SERVER + "check_login.php";
+        String url = Constants.ADDR_SERVER + "check_login.php?user=" + user + "&password=" + password;
 
         mAuthTask = new JsonObjectRequest
                 (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
@@ -136,6 +142,8 @@ public class LoginActivity extends AppCompatActivity {
                             if (isLoginOk) {
                                 mSnackbar = Snackbar.make(mLoginLayout, "CONNEXION REUSSI", Snackbar.LENGTH_LONG);
                                 mSnackbar.show();
+                                autolog.edit().putString(pseudo, user);
+                                autolog.edit().putString(psw, password);
                             } else {
                                 mSnackbar = Snackbar.make(mLoginLayout, response.getString("msg"), Snackbar.LENGTH_LONG);
                                 mSnackbar.show();
@@ -158,16 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                         mSnackbar = Snackbar.make(mLoginLayout, getString(R.string.error_http), Snackbar.LENGTH_LONG);
                         mSnackbar.show();
                     }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                // the POST parameters:
-                params.put("user", user);
-                params.put("password", password);
-                return params;
-            }
-        };
+                })
 
         Volley.newRequestQueue(this).add(mAuthTask);
     }
