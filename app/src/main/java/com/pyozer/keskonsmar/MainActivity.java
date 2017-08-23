@@ -37,12 +37,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
-    private JeuDeMotAdapter mJdmAdapter;
-    private List<JeuDeMot> mListJdm = new ArrayList<>();
 
-    private Snackbar mSnackbar;
 
     private LinearLayout mMainActivityLayout;
 
@@ -56,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_recent:
-                    fragment = new LastJDMFragment();
+                    fragment = JDMFragment.newInstance(false);
                     break;
                 case R.id.navigation_trending:
-                    fragment = new TrendingJDMFragment();
+                    fragment = JDMFragment.newInstance(true);
                     break;
                 case R.id.navigation_account:
                     fragment = new AccountFragment();
@@ -84,116 +79,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        mJdmAdapter = new JeuDeMotAdapter(mListJdm);
-
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        mRecyclerView.setAdapter(mJdmAdapter);
-
-        mRecyclerView.addOnItemTouchListener(new JeuDeMotTouch(getApplicationContext(), mRecyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                JeuDeMot data = mListJdm.get(position);
-
-                // TODO: Faire quelques chose quand on clique sur un JDM
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-            }
-        }));
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.md_red_500, R.color.md_indigo_500, R.color.md_lime_500, R.color.md_orange_500);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (checkInternet()) loadData();
-                else mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
-        loadData();
-    }
-
-    private void loadData() {
-        mSwipeRefreshLayout.setRefreshing(true);
-
-        String url = Constants.ADDR_SERVER + "get_data.php";
-
-        JsonArrayRequest jsonRequest = new JsonArrayRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        // the response is already constructed as a JSONObject!
-                        mListJdm.clear();
-
-                        try {
-                            //response = response.getJSONArray(0);
-
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject jdmObject = response.getJSONObject(i);
-
-                                int id_jdm = jdmObject.getInt("id_jdm");
-                                String text_jdm = jdmObject.getString("text_jdm");
-                                String auteur_jdm = jdmObject.getString("pseudo_user");
-                                String date_jdm = jdmObject.getString("date_jdm");
-
-                                mListJdm.add(new JeuDeMot(id_jdm, text_jdm, auteur_jdm, date_jdm));
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        mJdmAdapter.notifyDataSetChanged();
-
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-
-                        mSwipeRefreshLayout.setRefreshing(false);
-
-                        mSnackbar = Snackbar.make(mMainActivityLayout, getString(R.string.error_http), Snackbar.LENGTH_LONG);
-                        mSnackbar.show();
-                    }
-                });
-
-        Volley.newRequestQueue(this).add(jsonRequest);
-
-    }
-
-    // Permet de vérifier la connexion internet
-    public boolean checkInternet() {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            if(mSnackbar != null)
-                mSnackbar.dismiss();
-            return true;
-        } else {
-            mSnackbar = Snackbar
-                    .make(mMainActivityLayout, getString(R.string.no_internet), Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Réessayer", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            MainActivity.this.finish();
-                            startActivity(new Intent(MainActivity.this, MainActivity.class));
-                        }
-                    });
-            mSnackbar.setActionTextColor(Color.YELLOW);
-            mSnackbar.show();
-
-            return false;
-        }
     }
 
 }
