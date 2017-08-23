@@ -1,5 +1,6 @@
 package com.pyozer.keskonsmar;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -82,8 +83,8 @@ public class AddJdmActivity extends AppCompatActivity {
                             boolean isJdmOk = response.getBoolean("status");
 
                             if (isJdmOk) {
-                                mSnackbar = Snackbar.make(mAddJdmLayout, getString(R.string.add_send_success), Snackbar.LENGTH_LONG);
-                                mSnackbar.show();
+                                Intent in = new Intent(AddJdmActivity.this, MainActivity.class);
+                                startActivity(in);
                             } else {
                                 mSnackbar = Snackbar.make(mAddJdmLayout, response.getString("msg"), Snackbar.LENGTH_LONG);
                                 mSnackbar.show();
