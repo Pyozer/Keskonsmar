@@ -166,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                         mSnackbar = Snackbar.make(mLoginLayout, getString(R.string.error_http), Snackbar.LENGTH_LONG);
                         mSnackbar.show();
                     }
-                })
+                });
 
         Volley.newRequestQueue(this).add(mAuthTask);
     }
