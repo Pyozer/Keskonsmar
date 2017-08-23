@@ -5,9 +5,14 @@
     <color name="colorAccent">#ef5350</color>
     <color name="white">#ffffff</color>
 
-    <color name="auteur">#222222</color>
-    <color name="date">#222222</color>
-    <color name="jeuDeMot">#222222</color>
+    <color name="background">#fff8f8</color>
+    <color name="divider">#fff8f8</color>
+
+    <color name="bg_gradient_start">#261c3e</color>
+    <color name="bg_gradient_end">#462331</color>
+
+    <color name="bottomNavColor">#444</color>
+    <color name="bottomNavColorDisable">#999999</color>
 
     <color name="md_red_500">#F44336</color>
     <color name="md_indigo_500">#3F51B5</color>
