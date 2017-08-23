@@ -3,6 +3,8 @@ package com.pyozer.keskonsmar;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,9 +27,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * A login screen that offers login via email/password.
  */
@@ -48,10 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private LinearLayout mLoginLayout;
 
-    SharedPreferences autolog;
-    public static final String Log = "Log";
-    public static final String pseudo = "Pseudo";
-    public static final String psw = "Password";
+    private SharedPreferences autolog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +70,8 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        autolog = getSharedPreferences(Constants.PREF_KEY_ACCOUNT, Context.MODE_PRIVATE);
     }
 
     /**
@@ -140,10 +138,14 @@ public class LoginActivity extends AppCompatActivity {
                             boolean isLoginOk = response.getBoolean("status");
 
                             if (isLoginOk) {
-                                mSnackbar = Snackbar.make(mLoginLayout, "CONNEXION REUSSI", Snackbar.LENGTH_LONG);
-                                mSnackbar.show();
-                                autolog.edit().putString(pseudo, user);
-                                autolog.edit().putString(psw, password);
+                                SharedPreferences.Editor editor = autolog.edit();
+                                editor.putString(Constants.PREF_KEY_ACCOUNT_PSEUDO, user);
+                                editor.putString(Constants.PREF_KEY_ACCOUNT_PASSWORD, password);
+                                editor.apply();
+
+                                Intent in = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(in);
+
                             } else {
                                 mSnackbar = Snackbar.make(mLoginLayout, response.getString("msg"), Snackbar.LENGTH_LONG);
                                 mSnackbar.show();
