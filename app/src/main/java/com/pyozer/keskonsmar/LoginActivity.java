@@ -87,12 +87,12 @@ public class LoginActivity extends AppCompatActivity {
         String userGetPref = autolog.getString(Constants.PREF_KEY_ACCOUNT_PSEUDO, null);
         String passGetPref = autolog.getString(Constants.PREF_KEY_ACCOUNT_PASSWORD, null);
 
-        /*if (userGetPref != null && passGetPref != null) {
+        if (userGetPref != null && passGetPref != null) {
             mInputUser.setText(userGetPref);
             mInputPassword.setText(passGetPref);
 
             check_login(userGetPref, passGetPref);
-        }*/
+        }
     }
 
     /**
