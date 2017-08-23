@@ -71,6 +71,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        Button mRegisterButton = (Button) findViewById(R.id.login_register);
+        mRegisterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLoginRegister();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
@@ -79,19 +87,24 @@ public class LoginActivity extends AppCompatActivity {
         String userGetPref = autolog.getString(Constants.PREF_KEY_ACCOUNT_PSEUDO, null);
         String passGetPref = autolog.getString(Constants.PREF_KEY_ACCOUNT_PASSWORD, null);
 
-        if (userGetPref != null && passGetPref != null) {
+        /*if (userGetPref != null && passGetPref != null) {
             mInputUser.setText(userGetPref);
             mInputPassword.setText(passGetPref);
 
             check_login(userGetPref, passGetPref);
-        }
+        }*/
     }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * errors are presented and no actual login attempt is made
      */
+
+    private void attemptLoginRegister(){
+        Intent in = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(in);
+    }
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
