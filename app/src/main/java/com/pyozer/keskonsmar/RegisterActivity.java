@@ -83,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void check_register(final String user, final String password) {
 
-        String url = Constants.ADDR_SERVER + "check_register.php";
+        String url = Constants.ADDR_SERVER + "register.php";
 
         mAuthTask = new JsonObjectRequest
                 (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
@@ -97,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                             boolean isLoginOk = response.getBoolean("status");
 
                             if (isLoginOk) {
-                                mSnackbar = Snackbar.make(mRegisterLayout, "CONNEXION REUSSI", Snackbar.LENGTH_LONG);
+                                mSnackbar = Snackbar.make(mRegisterLayout, "INSCRIPTION REUSSI", Snackbar.LENGTH_LONG);
                                 mSnackbar.show();
                             } else {
                                 mSnackbar = Snackbar.make(mRegisterLayout, response.getString("msg"), Snackbar.LENGTH_LONG);
