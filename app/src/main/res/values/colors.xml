@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#f44336</color>
-    <color name="colorPrimaryDark">#bc362a</color>
-    <color name="colorAccent">#ffc107</color>
+    <color name="colorPrimary">#424242</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#607D8B</color>
     <color name="white">#ffffff</color>
+
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
 
     <color name="auteur">#222222</color>
     <color name="date">#222222</color>
