@@ -1,18 +1,15 @@
 package com.pyozer.keskonsmar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -23,32 +20,28 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText mInputUser;
     private EditText mInputPassword;
     private EditText mInputPasswordConf;
-    private View mProgressView;
-    private View mLoginFormView;
 
-    private LinearLayout mRegisterLayout;
+    private View mProgressView;
+    private View mRegisterFormView;
+    private RelativeLayout mRegisterLayout;
+
     private Snackbar mSnackbar;
+
     private JsonObjectRequest mAuthTask = null;
 
-    SharedPreferences autolog;
-    public static final String Log = "Log";
-    public static final String pseudo = "Pseudo";
-    public static final String psw = "Password";
+    private SharedPreferences autolog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mRegisterLayout = (LinearLayout) findViewById(R.id.register_view);
+        mRegisterLayout = (RelativeLayout) findViewById(R.id.register_view);
 
         mInputUser = (EditText) findViewById(R.id.register_input_user);
         mInputPassword = (EditText) findViewById(R.id.register_input_password);
@@ -61,6 +54,11 @@ public class RegisterActivity extends AppCompatActivity {
                 attemptRegister();
             }
         });
+
+        mRegisterFormView = findViewById(R.id.register_form);
+        mProgressView = findViewById(R.id.register_progress);
+
+        autolog = getSharedPreferences(Constants.PREF_KEY_ACCOUNT, MODE_PRIVATE);
     }
 
     private void attemptRegister() {
@@ -69,31 +67,48 @@ public class RegisterActivity extends AppCompatActivity {
         String pass = mInputPassword.getText().toString().trim();
         String passConf = mInputPasswordConf.getText().toString().trim();
 
-        if(user.length() > 0 && pass.length() > 0 && passConf.length() > 0) {
-            if(pass.length() >= Constants.MIN_PASS_LENGTH) {
-                if(pass.equals(passConf)) {
-                    check_register(user , pass);
-                } else {
-                    mSnackbar = Snackbar.make(mRegisterLayout, getString(R.string.register_mdp_dif), Snackbar.LENGTH_LONG);
-                    mSnackbar.show();
-                }
-            } else {
-                mSnackbar = Snackbar.make(mRegisterLayout, getString(R.string.register_mdp_tcourt), Snackbar.LENGTH_LONG);
-                mSnackbar.show();
-            }
-        } else {
-            mSnackbar = Snackbar.make(mRegisterLayout, getString(R.string.register_champ_vide), Snackbar.LENGTH_LONG);
-            mSnackbar.show();
+        boolean cancel = false;
+        View focusView = null;
+
+        if (TextUtils.isEmpty(passConf)) {
+            mInputPasswordConf.setError(getString(R.string.error_field_required));
+            focusView = mInputPasswordConf;
+            cancel = true;
         }
+        if (TextUtils.isEmpty(pass)) {
+            mInputPassword.setError(getString(R.string.error_field_required));
+            focusView = mInputPassword;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(user)) {
+            mInputUser.setError(getString(R.string.error_field_required));
+            focusView = mInputUser;
+            cancel = true;
+        }
+        if (pass.length() >= Constants.MIN_PASS_LENGTH) {
+            mInputPassword.setError(getString(R.string.register_mdp_tcourt));
+            focusView = mInputPassword;
+            cancel = true;
+        }
+        if (pass.equals(passConf)) {
+            mInputPasswordConf.setError(getString(R.string.register_mdp_dif));
+            focusView = mInputPasswordConf;
+            cancel = true;
+        }
+
+        if (cancel) focusView.requestFocus();
+        else check_register(user, pass);
 
     }
 
     private void check_register(final String user, final String password) {
 
-        String url = Constants.ADDR_SERVER + "register.php";
+        showProgress(true);
+
+        String url = Constants.ADDR_SERVER + "register.php?user=" + user + "&password=" + password;
 
         mAuthTask = new JsonObjectRequest
-                (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         // the response is already constructed as a JSONObject!
@@ -101,13 +116,17 @@ public class RegisterActivity extends AppCompatActivity {
                         showProgress(false);
 
                         try {
-                            boolean isLoginOk = response.getBoolean("status");
+                            boolean isRegisterOk = response.getBoolean("status");
 
-                            if (isLoginOk) {
+                            if (isRegisterOk) {
+
                                 SharedPreferences.Editor editor = autolog.edit();
                                 editor.putString(Constants.PREF_KEY_ACCOUNT_PSEUDO, user);
                                 editor.putString(Constants.PREF_KEY_ACCOUNT_PASSWORD, password);
                                 editor.apply();
+
+                                Intent in = new Intent(RegisterActivity.this, MainActivity.class);
+                                startActivity(in);
                             } else {
                                 mSnackbar = Snackbar.make(mRegisterLayout, response.getString("msg"), Snackbar.LENGTH_LONG);
                                 mSnackbar.show();
@@ -130,51 +149,14 @@ public class RegisterActivity extends AppCompatActivity {
                         mSnackbar = Snackbar.make(mRegisterLayout, getString(R.string.error_http), Snackbar.LENGTH_LONG);
                         mSnackbar.show();
                     }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                // the POST parameters:
-                params.put("user", user);
-                params.put("password", password);
-                return params;
-            }
-        };
+                });
 
         Volley.newRequestQueue(this).add(mAuthTask);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
 }
