@@ -3,6 +3,8 @@ package com.pyozer.keskonsmar;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,11 @@ public class RegisterActivity extends AppCompatActivity {
     private LinearLayout mRegisterLayout;
     private Snackbar mSnackbar;
     private JsonObjectRequest mAuthTask = null;
+
+    SharedPreferences autolog;
+    public static final String Log = "Log";
+    public static final String pseudo = "Pseudo";
+    public static final String psw = "Password";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +104,10 @@ public class RegisterActivity extends AppCompatActivity {
                             boolean isLoginOk = response.getBoolean("status");
 
                             if (isLoginOk) {
-                                mSnackbar = Snackbar.make(mRegisterLayout, "INSCRIPTION REUSSI", Snackbar.LENGTH_LONG);
-                                mSnackbar.show();
+                                SharedPreferences.Editor editor = autolog.edit();
+                                editor.putString(Constants.PREF_KEY_ACCOUNT_PSEUDO, user);
+                                editor.putString(Constants.PREF_KEY_ACCOUNT_PASSWORD, password);
+                                editor.apply();
                             } else {
                                 mSnackbar = Snackbar.make(mRegisterLayout, response.getString("msg"), Snackbar.LENGTH_LONG);
                                 mSnackbar.show();
