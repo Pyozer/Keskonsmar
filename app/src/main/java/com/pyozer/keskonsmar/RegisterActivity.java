@@ -85,12 +85,12 @@ public class RegisterActivity extends AppCompatActivity {
             focusView = mInputUser;
             cancel = true;
         }
-        if (pass.length() >= Constants.MIN_PASS_LENGTH) {
+        if (pass.length() < Constants.MIN_PASS_LENGTH) {
             mInputPassword.setError(getString(R.string.register_mdp_tcourt));
             focusView = mInputPassword;
             cancel = true;
         }
-        if (pass.equals(passConf)) {
+        if (!pass.equals(passConf)) {
             mInputPasswordConf.setError(getString(R.string.register_mdp_dif));
             focusView = mInputPasswordConf;
             cancel = true;
@@ -121,6 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if (isRegisterOk) {
 
                                 SharedPreferences.Editor editor = autolog.edit();
+                                editor.putInt(Constants.PREF_KEY_ACCOUNT_ID, response.getInt("msg"));
                                 editor.putString(Constants.PREF_KEY_ACCOUNT_PSEUDO, user);
                                 editor.putString(Constants.PREF_KEY_ACCOUNT_PASSWORD, password);
                                 editor.apply();

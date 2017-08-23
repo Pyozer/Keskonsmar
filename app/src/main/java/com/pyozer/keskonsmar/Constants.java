@@ -6,6 +6,7 @@ public interface Constants {
     int MIN_PASS_LENGTH = 5;
 
     String PREF_KEY_ACCOUNT = "account";
+    String PREF_KEY_ACCOUNT_ID = "id";
     String PREF_KEY_ACCOUNT_PSEUDO = "pseudo";
     String PREF_KEY_ACCOUNT_PASSWORD = "password";
 

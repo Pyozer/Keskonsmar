@@ -163,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (isLoginOk) {
                                 SharedPreferences.Editor editor = autolog.edit();
+                                editor.putInt(Constants.PREF_KEY_ACCOUNT_ID, response.getInt("msg"));
                                 editor.putString(Constants.PREF_KEY_ACCOUNT_PSEUDO, user);
                                 editor.putString(Constants.PREF_KEY_ACCOUNT_PASSWORD, password);
                                 editor.apply();
