@@ -1,5 +1,7 @@
 package com.pyozer.keskonsmar;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;

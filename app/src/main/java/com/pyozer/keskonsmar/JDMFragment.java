@@ -157,7 +157,7 @@ public class JDMFragment extends Fragment {
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            if(mSnackbar != null)
+            if (mSnackbar != null)
                 mSnackbar.dismiss();
             return true;
         } else {

@@ -16,17 +16,26 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".AddJdmActivity" />
-        <activity android:name=".RegisterActivity" />
+
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/activity_title_login" />
+
+        <activity
+            android:name=".AddJdmActivity"
+            android:label="@string/activity_title_add_jdm"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/activity_title_register" />
 
     </application>
 </manifest>

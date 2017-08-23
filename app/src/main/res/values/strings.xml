@@ -4,6 +4,10 @@
     <string name="title_trending">Tendances</string>
     <string name="title_account">Mon compte</string>
 
+    <string name="activity_title_add_jdm">Nouveau JDM</string>
+    <string name="activity_title_login">Connexion</string>
+    <string name="activity_title_register">Inscription</string>
+
     <string name="no_internet">Aucune connexion internet !</string>
     <string name="error_http">Erreur lors du chargement des données :/</string>
     <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
