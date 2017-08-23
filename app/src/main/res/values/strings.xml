@@ -23,5 +23,8 @@
     <string name="register_label_password">Mot de passe</string>
     <string name="register_label_password_conf">Confirmer mot de passe</string>
     <string name="register_action_submit">Valider</string>
+    <string name="register_mdp_dif">Les mots de passe doivent être identique</string>
+    <string name="register_mdp_tcourt">Votre Mot de passe ne doit pas contenir moins de 5 caractères</string>
+    <string name="register_champ_vide">Il faut remplir toute les cases</string>
 
 </resources>
