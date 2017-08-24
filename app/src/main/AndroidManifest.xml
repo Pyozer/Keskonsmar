@@ -13,36 +13,42 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:label="@string/activity_title_login"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.UI.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".RegisterActivity"
             android:label="@string/activity_title_register"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.UI.NoActionBar" />
-
         <activity
             android:name=".AddJdmActivity"
             android:label="@string/activity_title_add_jdm"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".TESTActivity"
+            android:label="@string/title_activity_test"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
+
 </manifest>
