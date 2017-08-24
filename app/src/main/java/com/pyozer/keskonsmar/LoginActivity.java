@@ -1,23 +1,19 @@
 package com.pyozer.keskonsmar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -28,36 +24,29 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private JsonObjectRequest mAuthTask = null;
-
     // UI references.
     private EditText mInputUser;
     private EditText mInputPassword;
-    private View mProgressView;
-    private View mLoginFormView;
+
+    private ProgressDialog pDialog;
 
     private Snackbar mSnackbar;
 
-    private RelativeLayout mLoginLayout;
+    private ScrollView mLoginLayout;
 
-    private SharedPreferences autolog;
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mLoginLayout = (RelativeLayout) findViewById(R.id.login_view);
+        mLoginLayout = (ScrollView) findViewById(R.id.login_view);
 
         // Set up the login form.
         mInputUser = (EditText) findViewById(R.id.login_input_user);
@@ -71,28 +60,32 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mRegisterButton = (Button) findViewById(R.id.login_register);
-        mRegisterButton.setOnClickListener(new OnClickListener() {
+        TextView mLinkToRegister = (TextView) findViewById(R.id.login_to_register);
+        mLinkToRegister.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLoginRegister();
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        // Progress dialog
+        pDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
+        pDialog.setIndeterminate(true);
+        pDialog.setMessage("Connexion...");
+        pDialog.setCancelable(false);
 
-        autolog = getSharedPreferences(Constants.PREF_KEY_ACCOUNT, Context.MODE_PRIVATE);
+        // Session manager
+        session = new SessionManager(getApplicationContext());
 
-        String userGetPref = autolog.getString(Constants.PREF_KEY_ACCOUNT_PSEUDO, null);
-        String passGetPref = autolog.getString(Constants.PREF_KEY_ACCOUNT_PASSWORD, null);
-
-        if (userGetPref != null && passGetPref != null) {
-            mInputUser.setText(userGetPref);
-            mInputPassword.setText(passGetPref);
-
-            check_login(userGetPref, passGetPref);
-        }
+        // Check if user is already logged in or not
+        /*if (session.isLoggedIn()) {
+            // User is already logged in. Take him to main activity
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }*/
     }
 
     /**
@@ -100,15 +93,7 @@ public class LoginActivity extends AppCompatActivity {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made
      */
-
-    private void attemptLoginRegister(){
-        Intent in = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(in);
-    }
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mInputUser.setError(null);
@@ -146,30 +131,27 @@ public class LoginActivity extends AppCompatActivity {
 
     private void check_login(final String user, final String password) {
 
-        showProgress(true);
+        showDialog();
 
         String url = Constants.ADDR_SERVER + "check_login.php?user=" + user + "&password=" + password;
 
-        mAuthTask = new JsonObjectRequest
-                (Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest mAuthTask = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // the response is already constructed as a JSONObject!
-                        mAuthTask = null;
-                        showProgress(false);
+
+                        hideDialog();
 
                         try {
                             boolean isLoginOk = response.getBoolean("status");
 
                             if (isLoginOk) {
-                                SharedPreferences.Editor editor = autolog.edit();
-                                editor.putInt(Constants.PREF_KEY_ACCOUNT_ID, response.getInt("msg"));
-                                editor.putString(Constants.PREF_KEY_ACCOUNT_PSEUDO, user);
-                                editor.putString(Constants.PREF_KEY_ACCOUNT_PASSWORD, password);
-                                editor.apply();
+
+                                session.login(response.getInt("msg"), user, password);
 
                                 Intent in = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(in);
+                                finish();
 
                             } else {
                                 mSnackbar = Snackbar.make(mLoginLayout, response.getString("msg"), Snackbar.LENGTH_LONG);
@@ -187,8 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
 
-                        mAuthTask = null;
-                        showProgress(false);
+                        hideDialog();
 
                         mSnackbar = Snackbar.make(mLoginLayout, getString(R.string.error_http), Snackbar.LENGTH_LONG);
                         mSnackbar.show();
@@ -198,11 +179,13 @@ public class LoginActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(mAuthTask);
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    private void showProgress(final boolean show) {
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 }

@@ -20,19 +20,20 @@
     <string name="add_error">Vous n\'avez pas rentré de JDM</string>
     <string name="add_send_success">Votre JDM a bien été envoyé !</string>
 
-
     <string name="login_title">Connexion</string>
     <string name="login_label_user">Pseudo</string>
     <string name="login_label_password">Mot de passe</string>
-    <string name="login_action_submit">Valider</string>
+    <string name="login_action_submit">Connexion</string>
+    <string name="login_link_register">Pas encore de compte ? Inscrivez-vous.</string>
 
     <string name="register_title">Inscription</string>
     <string name="register_label_user">Pseudo</string>
     <string name="register_label_password">Mot de passe</string>
     <string name="register_label_password_conf">Confirmer mot de passe</string>
-    <string name="register_action_submit">Valider</string>
-    <string name="register_mdp_dif">Les mots de passe doivent être identique</string>
-    <string name="register_mdp_tcourt">Votre Mot de passe ne doit pas contenir moins de 5 caractères</string>
-    <string name="register_champ_vide">Il faut remplir toute les cases</string>
+    <string name="register_action_submit">S\'inscrire</string>
+    <string name="register_mdp_dif">Les mots de passe doivent être identiques.</string>
+    <string name="register_mdp_tcourt">Votre mot de passe doit contenir au moins 5 caractères.</string>
+    <string name="register_champ_vide">Il faut remplir toutes les champs de texte.</string>
+    <string name="register_link_login">Déjà membre ? Connectez-vous.</string>
 
 </resources>

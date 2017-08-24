@@ -1,5 +1,6 @@
 package com.pyozer.keskonsmar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -26,22 +29,20 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mInputPassword;
     private EditText mInputPasswordConf;
 
-    private View mProgressView;
-    private View mRegisterFormView;
-    private RelativeLayout mRegisterLayout;
+    private ProgressDialog pDialog;
+
+    private ScrollView mRegisterLayout;
 
     private Snackbar mSnackbar;
 
-    private JsonObjectRequest mAuthTask = null;
-
-    private SharedPreferences autolog;
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mRegisterLayout = (RelativeLayout) findViewById(R.id.register_view);
+        mRegisterLayout = (ScrollView) findViewById(R.id.register_view);
 
         mInputUser = (EditText) findViewById(R.id.register_input_user);
         mInputPassword = (EditText) findViewById(R.id.register_input_password);
@@ -55,10 +56,32 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        mRegisterFormView = findViewById(R.id.register_form);
-        mProgressView = findViewById(R.id.register_progress);
+        TextView mLinkToLogin = (TextView) findViewById(R.id.register_to_login);
+        mLinkToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
-        autolog = getSharedPreferences(Constants.PREF_KEY_ACCOUNT, MODE_PRIVATE);
+        // Progress dialog
+        pDialog = new ProgressDialog(RegisterActivity.this, R.style.AppTheme_Dark_Dialog);
+        pDialog.setIndeterminate(true);
+        pDialog.setMessage("Inscription...");
+        pDialog.setCancelable(false);
+
+        // Session manager
+        session = new SessionManager(getApplicationContext());
+
+        // Check if user is already logged in or not
+        /*if (session.isLoggedIn()) {
+            // User is already logged in. Take him to main activity
+            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }*/
     }
 
     private void attemptRegister() {
@@ -103,28 +126,23 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void check_register(final String user, final String password) {
 
-        showProgress(true);
+        showDialog();
 
         String url = Constants.ADDR_SERVER + "register.php?user=" + user + "&password=" + password;
 
-        mAuthTask = new JsonObjectRequest
+        JsonObjectRequest mAuthTask = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         // the response is already constructed as a JSONObject!
-                        mAuthTask = null;
-                        showProgress(false);
+                        hideDialog();
 
                         try {
                             boolean isRegisterOk = response.getBoolean("status");
 
                             if (isRegisterOk) {
 
-                                SharedPreferences.Editor editor = autolog.edit();
-                                editor.putInt(Constants.PREF_KEY_ACCOUNT_ID, response.getInt("msg"));
-                                editor.putString(Constants.PREF_KEY_ACCOUNT_PSEUDO, user);
-                                editor.putString(Constants.PREF_KEY_ACCOUNT_PASSWORD, password);
-                                editor.apply();
+                                session.login(response.getInt("msg"), user, password);
 
                                 Intent in = new Intent(RegisterActivity.this, MainActivity.class);
                                 startActivity(in);
@@ -144,8 +162,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
 
-                        mAuthTask = null;
-                        showProgress(false);
+                        hideDialog();
 
                         mSnackbar = Snackbar.make(mRegisterLayout, getString(R.string.error_http), Snackbar.LENGTH_LONG);
                         mSnackbar.show();
@@ -155,9 +172,14 @@ public class RegisterActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(mAuthTask);
     }
 
-    private void showProgress(final boolean show) {
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 
 }
