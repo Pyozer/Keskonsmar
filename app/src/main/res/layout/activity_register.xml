@@ -23,8 +23,8 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp">
 
             <EditText
                 android:id="@+id/register_input_user"
@@ -39,8 +39,8 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp">
 
             <EditText
                 android:id="@+id/register_input_password"
@@ -55,8 +55,8 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp">
 
             <EditText
                 android:id="@+id/register_input_password_conf"
@@ -68,13 +68,15 @@
         </android.support.design.widget.TextInputLayout>
 
 
-        <android.support.v7.widget.AppCompatButton
+        <Button
             android:id="@+id/register_action_submit"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp"
             android:padding="12dp"
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white"
             android:text="@string/register_action_submit" />
 
         <TextView

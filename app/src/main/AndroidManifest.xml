@@ -36,7 +36,7 @@
             android:name=".RegisterActivity"
             android:label="@string/activity_title_register"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.UI.NoActionBar" />
 
         <activity
             android:name=".AddJdmActivity"
