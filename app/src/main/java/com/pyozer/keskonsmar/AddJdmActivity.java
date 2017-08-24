@@ -61,8 +61,8 @@ public class AddJdmActivity extends AppCompatActivity {
     private void addNewJdm() {
         String jdm = mInputJdm.getText().toString().trim();
 
-        SharedPreferences sharedPref = getSharedPreferences(Constants.PREF_KEY_ACCOUNT, MODE_PRIVATE);
-        int idUser = sharedPref.getInt(Constants.PREF_KEY_ACCOUNT_ID, -1);
+        SharedPreferences sharedPref = getSharedPreferences(AppConfig.PREF_KEY_ACCOUNT, MODE_PRIVATE);
+        int idUser = sharedPref.getInt(AppConfig.PREF_KEY_ACCOUNT_ID, -1);
 
         if(idUser != -1) {
             if (jdm.length() > 0) {
@@ -80,7 +80,7 @@ public class AddJdmActivity extends AppCompatActivity {
 
     private void check_jdm(final int idUser, final String jdm) {
 
-        String url = Constants.ADDR_SERVER + "add_jdm.php?user=" + idUser + "&jdm=" + jdm;
+        String url = AppConfig.ADDR_SERVER + "add_jdm.php?user=" + idUser + "&jdm=" + jdm;
 
         mAuthTask = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

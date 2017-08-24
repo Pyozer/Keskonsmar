@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -133,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
 
         showDialog();
 
-        String url = Constants.ADDR_SERVER + "check_login.php?user=" + user + "&password=" + password;
+        String url = AppConfig.ADDR_SERVER + "check_login.php?user=" + user + "&password=" + password;
 
         JsonObjectRequest mAuthTask = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

@@ -18,17 +18,17 @@ public class SessionManager {
 
     public SessionManager(Context context) {
         this._context = context;
-        pref = _context.getSharedPreferences(Constants.PREF_KEY_ACCOUNT, Context.MODE_PRIVATE);
+        pref = _context.getSharedPreferences(AppConfig.PREF_KEY_ACCOUNT, Context.MODE_PRIVATE);
         editor = pref.edit();
     }
 
     public void login(int id_user, String pseudo_user, String password_user) {
 
-        editor.putInt(Constants.PREF_KEY_ACCOUNT_ID, id_user);
-        editor.putString(Constants.PREF_KEY_ACCOUNT_PSEUDO, pseudo_user);
-        editor.putString(Constants.PREF_KEY_ACCOUNT_PASSWORD, password_user);
+        editor.putInt(AppConfig.PREF_KEY_ACCOUNT_ID, id_user);
+        editor.putString(AppConfig.PREF_KEY_ACCOUNT_PSEUDO, pseudo_user);
+        editor.putString(AppConfig.PREF_KEY_ACCOUNT_PASSWORD, password_user);
 
-        editor.putBoolean(Constants.PREF_KEY_IS_LOGGEDIN, true);
+        editor.putBoolean(AppConfig.PREF_KEY_IS_LOGGEDIN, true);
 
         // commit changes
         editor.apply();
@@ -38,11 +38,11 @@ public class SessionManager {
 
     public void logout() {
 
-        editor.remove(Constants.PREF_KEY_ACCOUNT_ID);
-        editor.remove(Constants.PREF_KEY_ACCOUNT_PSEUDO);
-        editor.remove(Constants.PREF_KEY_ACCOUNT_PASSWORD);
+        editor.remove(AppConfig.PREF_KEY_ACCOUNT_ID);
+        editor.remove(AppConfig.PREF_KEY_ACCOUNT_PSEUDO);
+        editor.remove(AppConfig.PREF_KEY_ACCOUNT_PASSWORD);
 
-        editor.putBoolean(Constants.PREF_KEY_IS_LOGGEDIN, false);
+        editor.putBoolean(AppConfig.PREF_KEY_IS_LOGGEDIN, false);
 
         // commit changes
         editor.apply();
@@ -51,6 +51,6 @@ public class SessionManager {
     }
 
     public boolean isLoggedIn(){
-        return pref.getBoolean(Constants.PREF_KEY_IS_LOGGEDIN, false);
+        return pref.getBoolean(AppConfig.PREF_KEY_IS_LOGGEDIN, false);
     }
 }

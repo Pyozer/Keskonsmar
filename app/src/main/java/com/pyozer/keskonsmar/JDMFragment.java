@@ -106,7 +106,7 @@ public class JDMFragment extends Fragment {
     private void loadData() {
         mSwipeRefreshLayout.setRefreshing(true);
 
-        String url = Constants.ADDR_SERVER + "get_data.php";
+        String url = AppConfig.ADDR_SERVER + "get_data.php";
 
         JsonArrayRequest jsonRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {

@@ -2,7 +2,6 @@ package com.pyozer.keskonsmar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -108,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
             focusView = mInputUser;
             cancel = true;
         }
-        if (pass.length() < Constants.MIN_PASS_LENGTH) {
+        if (pass.length() < AppConfig.MIN_PASS_LENGTH) {
             mInputPassword.setError(getString(R.string.register_mdp_tcourt));
             focusView = mInputPassword;
             cancel = true;
@@ -128,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         showDialog();
 
-        String url = Constants.ADDR_SERVER + "register.php?user=" + user + "&password=" + password;
+        String url = AppConfig.ADDR_SERVER + "register.php?user=" + user + "&password=" + password;
 
         JsonObjectRequest mAuthTask = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

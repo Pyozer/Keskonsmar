@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Keskonsmar</string>
+    <string name="app_slogan">Après tout c\'est pas si drôle</string>
     <string name="title_recent">Derniers ajoutés</string>
     <string name="title_trending">Tendances</string>
-    <string name="title_account">Mon compte</string>
+    <string name="title_versus">Versus</string>
 
     <string name="activity_title_add_jdm">Nouveau JDM</string>
     <string name="activity_title_login">Connexion</string>
@@ -35,11 +36,16 @@
     <string name="register_mdp_tcourt">Votre mot de passe doit contenir au moins 5 caractères.</string>
     <string name="register_champ_vide">Il faut remplir toutes les champs de texte.</string>
     <string name="register_link_login">Déjà membre ? Connectez-vous.</string>
-    <string name="title_activity_test">TESTActivity</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Ouvrir menu latéral</string>
+    <string name="navigation_drawer_close">Fermer menu latéral</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_search">Rechercher</string>
+
+    <string name="nav_app_info">L\'application</string>
+    <string name="nav_about">A propos</string>
+    <string name="nav_account">Mon compte</string>
+    <string name="nav_logout">Déconnexion</string>
+
 
 </resources>
