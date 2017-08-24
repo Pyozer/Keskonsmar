@@ -5,7 +5,7 @@
     <color name="colorAccent">#ef5350</color>
     <color name="white">#ffffff</color>
 
-    <color name="background">#fff8f8</color>
+    <color name="background">#ffffff</color>
     <color name="divider">#fff8f8</color>
 
     <color name="bg_gradient_start">#3d5aff</color>
@@ -13,6 +13,12 @@
 
     <color name="bottomNavColor">#444</color>
     <color name="bottomNavColorDisable">#999999</color>
+
+    <color name="jdmColor">#252525</color>
+    <color name="authorColor">#474747</color>
+    <color name="statColor">#555555</color>
+    <color name="dateColor">#727272</color>
+    <color name="iconColor">#414141</color>
 
     <color name="md_red_500">#F44336</color>
     <color name="md_indigo_500">#3F51B5</color>

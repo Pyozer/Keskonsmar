@@ -9,7 +9,7 @@ public class JeuDeMot {
 
     public JeuDeMot(int id_jdm, String text_jdm, String auteur_jdm, String date_jdm) {
         this.id_jdm = id_jdm;
-        this.auteur_jdm = "par " + auteur_jdm;
+        this.auteur_jdm = "@" + auteur_jdm;
         this.date_jdm = date_jdm;
         this.text_jdm = text_jdm;
     }
