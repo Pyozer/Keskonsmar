@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,9 +16,13 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Fragment fragment;
-    private FragmentManager fragmentManager;
+    private Fragment mFragment;
+    private FragmentManager mFragmentManager;
+
     private int lastFragmentLoad = 0;
+
+    private CoordinatorLayout mCoordLayout;
+    private Snackbar mSnackbar;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -26,22 +32,22 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_recent:
                     if (item.getItemId() != lastFragmentLoad) {
-                        fragment = JDMFragment.newInstance(false);
+                        mFragment = JDMFragment.newInstance(false);
                     }
                     break;
                 case R.id.navigation_trending:
                     if (item.getItemId() != lastFragmentLoad) {
-                        fragment = JDMFragment.newInstance(true);
+                        mFragment = JDMFragment.newInstance(true);
                     }
                     break;
                 case R.id.navigation_account:
                     if (item.getItemId() != lastFragmentLoad) {
-                        fragment = new AccountFragment();
+                        mFragment = new AccountFragment();
                     }
                     break;
             }
             lastFragmentLoad = item.getItemId();
-            loadFragment(fragment);
+            loadFragment(mFragment);
             return true;
         }
 
@@ -52,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragmentManager = getSupportFragmentManager();
+        mFragmentManager = getSupportFragmentManager();
+
+        mCoordLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -67,12 +75,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         loadFragment(JDMFragment.newInstance(false));
-
     }
 
     private void loadFragment(Fragment fragment) {
-        final FragmentTransaction transaction = fragmentManager.beginTransaction();
+        final FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.replace(R.id.main_content, fragment).commit();
     }
-
 }
