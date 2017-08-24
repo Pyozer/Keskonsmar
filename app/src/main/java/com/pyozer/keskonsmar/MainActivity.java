@@ -2,7 +2,6 @@ package com.pyozer.keskonsmar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageInstaller;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -66,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

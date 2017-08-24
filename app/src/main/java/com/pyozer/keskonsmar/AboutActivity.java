@@ -1,5 +1,6 @@
 package com.pyozer.keskonsmar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,16 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        SessionManager session = new SessionManager(getApplicationContext());
+        if(!session.isLoggedIn()) {
+            session.logout();
+
+            Intent intent = new Intent(AboutActivity.this, LoginActivity.class);
+            intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_not_login));
+            startActivity(intent);
+            finish();
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

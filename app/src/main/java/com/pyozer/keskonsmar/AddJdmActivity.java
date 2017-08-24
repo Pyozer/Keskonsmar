@@ -1,10 +1,11 @@
 package com.pyozer.keskonsmar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ public class AddJdmActivity extends AppCompatActivity {
     private RelativeLayout mAddJdmLayout;
 
     private Snackbar mSnackbar;
+    private ProgressDialog pDialog;
 
     private JsonObjectRequest mAuthTask = null;
 
@@ -38,6 +40,11 @@ public class AddJdmActivity extends AppCompatActivity {
         mAddJdmLayout = (RelativeLayout) findViewById(R.id.add_jdm_layout);
 
         mInputJdm = (EditText) findViewById(R.id.add_input_jdm);
+
+        pDialog = new ProgressDialog(AddJdmActivity.this);
+        pDialog.setIndeterminate(true);
+        pDialog.setMessage(getString(R.string.add_send_loader));
+        pDialog.setCancelable(false);
 
         Button mSubmitButton = (Button) findViewById(R.id.add_action_submit);
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +97,8 @@ public class AddJdmActivity extends AppCompatActivity {
 
     private void check_jdm(final int idUser, final String jdm) {
 
+        showDialog();
+
         String url = AppConfig.ADDR_SERVER + "add_jdm.php?user=" + idUser + "&jdm=" + jdm;
 
         mAuthTask = new JsonObjectRequest
@@ -98,6 +107,8 @@ public class AddJdmActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         // the response is already constructed as a JSONObject!
                         mAuthTask = null;
+
+                        hideDialog();
 
                         try {
                             boolean isJdmOk = response.getBoolean("status");
@@ -125,12 +136,24 @@ public class AddJdmActivity extends AppCompatActivity {
 
                         mAuthTask = null;
 
+                        hideDialog();
+
                         mSnackbar = Snackbar.make(mAddJdmLayout, getString(R.string.error_http), Snackbar.LENGTH_LONG);
                         mSnackbar.show();
                     }
                 });
 
         Volley.newRequestQueue(this).add(mAuthTask);
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 
 }

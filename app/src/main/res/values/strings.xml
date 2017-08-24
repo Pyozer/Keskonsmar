@@ -33,6 +33,7 @@
     <string name="add_action_submit">Valider</string>
     <string name="add_error">Vous n\'avez pas rentré de JDM</string>
     <string name="add_send_success">Votre JDM a bien été envoyé !</string>
+    <string name="add_send_loader">Envoie en cours…</string>
 
 
     <!-- CONNEXION -->
