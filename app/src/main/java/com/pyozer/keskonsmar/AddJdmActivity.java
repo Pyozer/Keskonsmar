@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -24,7 +26,7 @@ public class AddJdmActivity extends AppCompatActivity {
 
     private EditText mInputJdm;
 
-    private RelativeLayout mAddJdmLayout;
+    private LinearLayout mAddJdmLayout;
 
     private Snackbar mSnackbar;
     private ProgressDialog pDialog;
@@ -37,7 +39,7 @@ public class AddJdmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_jdm);
 
-        mAddJdmLayout = (RelativeLayout) findViewById(R.id.add_jdm_layout);
+        mAddJdmLayout = (LinearLayout) findViewById(R.id.add_jdm_layout);
 
         mInputJdm = (EditText) findViewById(R.id.add_input_jdm);
 
@@ -54,11 +56,11 @@ public class AddJdmActivity extends AppCompatActivity {
             }
         });
 
-        Button mCancelButton = (Button) findViewById(R.id.add_action_cancel);
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
+        TextView mCancelLink = (TextView) findViewById(R.id.add_action_cancel);
+        mCancelLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), JDMFragment.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
             }
