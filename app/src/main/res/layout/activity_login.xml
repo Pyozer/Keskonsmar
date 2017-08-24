@@ -13,14 +13,17 @@
         android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:paddingTop="56dp">
+        android:paddingTop="56dp"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="72dp"
+            android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="50dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"
+            android:contentDescription="@string/img_desc" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

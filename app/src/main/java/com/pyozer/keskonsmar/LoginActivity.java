@@ -70,21 +70,27 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // Progress dialog
-        pDialog = new ProgressDialog(LoginActivity.this, R.style.Theme_AppCompat_Dialog);
+        pDialog = new ProgressDialog(LoginActivity.this);
         pDialog.setIndeterminate(true);
-        pDialog.setMessage("Connexion...");
+        pDialog.setMessage(getString(R.string.login_loader));
         pDialog.setCancelable(false);
 
         // Session manager
         session = new SessionManager(getApplicationContext());
 
         // Check if user is already logged in or not
-        /*if (session.isLoggedIn()) {
+        if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-        }*/
+        }
+
+        String extrasValue = getIntent().getStringExtra(AppConfig.INTENT_EXTRA_KEY);
+        if (extrasValue != null) {
+            mSnackbar = Snackbar.make(mLoginLayout, extrasValue, Snackbar.LENGTH_LONG);
+            mSnackbar.show();
+        }
     }
 
     /**

@@ -11,4 +11,6 @@ public interface AppConfig {
     String PREF_KEY_ACCOUNT_PASSWORD = "password";
     String PREF_KEY_IS_LOGGEDIN = "isLoggedIn";
 
+    String INTENT_EXTRA_KEY = "SNACKBAR_MESSAGE";
+
 }

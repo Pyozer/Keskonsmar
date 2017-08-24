@@ -56,6 +56,16 @@ public class AddJdmActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        SessionManager session = new SessionManager(getApplicationContext());
+        if(!session.isLoggedIn()) {
+            session.logout();
+
+            Intent intent = new Intent(AddJdmActivity.this, LoginActivity.class);
+            intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_not_login));
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void addNewJdm() {
@@ -93,10 +103,10 @@ public class AddJdmActivity extends AppCompatActivity {
                             boolean isJdmOk = response.getBoolean("status");
 
                             if (isJdmOk) {
-                                mSnackbar = Snackbar.make(mAddJdmLayout, getString(R.string.add_send_success), Snackbar.LENGTH_LONG);
-                                mSnackbar.show();
                                 Intent in = new Intent(AddJdmActivity.this, MainActivity.class);
+                                in.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.add_send_success));
                                 startActivity(in);
+                                finish();
                             } else {
                                 mSnackbar = Snackbar.make(mAddJdmLayout, response.getString("msg"), Snackbar.LENGTH_LONG);
                                 mSnackbar.show();

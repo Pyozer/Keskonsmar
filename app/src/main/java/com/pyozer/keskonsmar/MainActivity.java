@@ -1,7 +1,10 @@
 package com.pyozer.keskonsmar;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
@@ -66,6 +69,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        SessionManager session = new SessionManager(getApplicationContext());
+        if(!session.isLoggedIn()) {
+            session.logout();
+
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_not_login));
+            startActivity(intent);
+            finish();
+        }
+
         mFragmentManager = getSupportFragmentManager();
 
         mCoordLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
@@ -92,6 +105,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         loadFragment(JDMFragment.newInstance(false));
+
+        String extrasValue = getIntent().getStringExtra(AppConfig.INTENT_EXTRA_KEY);
+        if (extrasValue != null) {
+            mSnackbar = Snackbar.make(mCoordLayout, extrasValue, Snackbar.LENGTH_LONG);
+            mSnackbar.show();
+        }
     }
 
     private void loadFragment(Fragment fragment) {
@@ -133,16 +152,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_account) {
 
-        } else if (id == R.id.nav_logout) {
-
         } else if (id == R.id.nav_about) {
 
+        } else if(id == R.id.nav_logout) {
+            SessionManager session = new SessionManager(getApplicationContext());
+
+            session.logout();
+
+            ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setIndeterminate(true);
+            pDialog.setMessage(getString(R.string.logout_loader));
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+            // On met un timer de 1,5sec
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_logout_success));
+                    startActivity(intent);
+                    finish();
+                }
+            }, 1500);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
