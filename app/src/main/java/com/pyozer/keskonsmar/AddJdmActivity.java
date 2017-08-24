@@ -46,6 +46,16 @@ public class AddJdmActivity extends AppCompatActivity {
                 addNewJdm();
             }
         });
+
+        Button mCancelButton = (Button) findViewById(R.id.add_action_cancel);
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), JDMFragment.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void addNewJdm() {
@@ -83,6 +93,8 @@ public class AddJdmActivity extends AppCompatActivity {
                             boolean isJdmOk = response.getBoolean("status");
 
                             if (isJdmOk) {
+                                mSnackbar = Snackbar.make(mAddJdmLayout, getString(R.string.add_send_success), Snackbar.LENGTH_LONG);
+                                mSnackbar.show();
                                 Intent in = new Intent(AddJdmActivity.this, MainActivity.class);
                                 startActivity(in);
                             } else {
