@@ -67,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         // Progress dialog
-        pDialog = new ProgressDialog(RegisterActivity.this, R.style.AppTheme_Dark_Dialog);
+        pDialog = new ProgressDialog(RegisterActivity.this, R.style.Theme_AppCompat_Dialog);
         pDialog.setIndeterminate(true);
         pDialog.setMessage("Inscription...");
         pDialog.setCancelable(false);

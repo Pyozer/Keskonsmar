@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // Progress dialog
-        pDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
+        pDialog = new ProgressDialog(LoginActivity.this, R.style.Theme_AppCompat_Dialog);
         pDialog.setIndeterminate(true);
         pDialog.setMessage("Connexion...");
         pDialog.setCancelable(false);

@@ -24,7 +24,7 @@
     <string name="login_label_user">Pseudo</string>
     <string name="login_label_password">Mot de passe</string>
     <string name="login_action_submit">Connexion</string>
-    <string name="login_link_register">Pas encore de compte ? Inscrivez-vous.</string>
+    <string name="login_link_register">Pas de compte ? Inscrivez-vous.</string>
 
     <string name="register_title">Inscription</string>
     <string name="register_label_user">Pseudo</string>

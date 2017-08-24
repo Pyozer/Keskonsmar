@@ -8,8 +8,8 @@
     <color name="background">#fff8f8</color>
     <color name="divider">#fff8f8</color>
 
-    <color name="bg_gradient_start">#261c3e</color>
-    <color name="bg_gradient_end">#462331</color>
+    <color name="bg_gradient_start">#3d5aff</color>
+    <color name="bg_gradient_end">#3074ff</color>
 
     <color name="bottomNavColor">#444</color>
     <color name="bottomNavColorDisable">#999999</color>
@@ -18,20 +18,5 @@
     <color name="md_indigo_500">#3F51B5</color>
     <color name="md_lime_500">#CDDC39</color>
     <color name="md_orange_500">#FF9800</color>
-
-    <!-- TEST -->
-    <color name="primary">#e43f3f</color>
-    <color name="primary_dark">#cc1d1d</color>
-    <color name="primary_darker">#cc1d1d</color>
-    <color name="accent">#FFFFFF</color>
-
-    <color name="black">#000000</color>
-    <color name="jet">#222222</color>
-    <color name="oil">#333333</color>
-    <color name="monsoon">#777777</color>
-    <color name="jumbo">#888888</color>
-    <color name="aluminum">#999999</color>
-    <color name="base">#AAAAAA</color>
-    <color name="iron">#CCCCCC</color>
 
 </resources>
