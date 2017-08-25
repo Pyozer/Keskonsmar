@@ -19,9 +19,9 @@ class JeuDeMotAdapter extends RecyclerView.Adapter<JeuDeMotAdapter.MyViewHolder>
 
         MyViewHolder(View view) {
             super(view);
-            auteur = (TextView) view.findViewById(R.id.auteur);
-            date = (TextView) view.findViewById(R.id.date);
-            jeuDeMot = (TextView) view.findViewById(R.id.jeuDeMot);
+            auteur = (TextView) view.findViewById(R.id.jdm_auteur);
+            date = (TextView) view.findViewById(R.id.jdm_date);
+            jeuDeMot = (TextView) view.findViewById(R.id.jdm_jeuDeMot);
         }
     }
 
