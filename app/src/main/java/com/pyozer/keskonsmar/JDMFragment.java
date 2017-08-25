@@ -88,15 +88,7 @@ public class JDMFragment extends Fragment {
                 alertDialog.setCancelable(true);
 
                 alertDialog.setPositiveButton(
-                        "C'est nul",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                alertDialog.setNegativeButton(
-                        "Pas mal",
+                        "C'est nul...",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -104,7 +96,7 @@ public class JDMFragment extends Fragment {
                         });
 
                 alertDialog.setNeutralButton(
-                        "Du génie",
+                        "Du génie !",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
