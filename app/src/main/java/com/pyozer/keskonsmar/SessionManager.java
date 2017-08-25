@@ -50,6 +50,10 @@ public class SessionManager {
         Log.d(TAG, "Login utilisateur supprimés !");
     }
 
+    public String getPseudo(){
+        return pref.getString(AppConfig.PREF_KEY_ACCOUNT_PSEUDO, "");
+    }
+
     public boolean isLoggedIn(){
         return pref.getBoolean(AppConfig.PREF_KEY_IS_LOGGEDIN, false);
     }

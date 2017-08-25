@@ -163,7 +163,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
             finish();
 
-        } else if(id == R.id.nav_logout) {
+        }
+        else if(id == R.id.nav_account){
+            Intent intent = new Intent(MainActivity.this, CompteActivity.class);
+            startActivity(intent);
+            finish();
+
+        }else if(id == R.id.nav_logout) {
             SessionManager session = new SessionManager(getApplicationContext());
 
             session.logout();
