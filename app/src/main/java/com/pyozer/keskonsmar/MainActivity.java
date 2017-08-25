@@ -156,20 +156,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_account) {
-
-        } else if (id == R.id.nav_about) {
+        if (id == R.id.nav_about) {
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
             finish();
 
-        }
-        else if(id == R.id.nav_account){
+        } else if(id == R.id.nav_account){
             Intent intent = new Intent(MainActivity.this, CompteActivity.class);
             startActivity(intent);
             finish();
 
-        }else if(id == R.id.nav_logout) {
+        } else if(id == R.id.nav_logout) {
             SessionManager session = new SessionManager(getApplicationContext());
 
             session.logout();

@@ -35,16 +35,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.UI.NoActionBar" />
         <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".AddJdmActivity"
             android:label="@string/activity_title_add_jdm"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AboutActivity"
-            android:label="@string/title_activity_about"
+            android:name=".CompteActivity"
+            android:label="@string/title_activity_account"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".CompteActivity"></activity>
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

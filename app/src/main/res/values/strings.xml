@@ -21,6 +21,7 @@
     <string name="activity_title_login">Connexion</string>
     <string name="activity_title_register">Inscription</string>
     <string name="title_activity_about">A propos</string>
+    <string name="title_activity_account">Mon compte</string>
 
 
     <!-- ERREURS -->
