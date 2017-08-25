@@ -15,4 +15,15 @@
         android:textSize="50px"
         tools:layout_editor_absoluteX="140dp"
         tools:layout_editor_absoluteY="16dp" />
+
+    <Button
+        android:id="@+id/chg_mdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Changer le mot de passe"
+        tools:layout_editor_absoluteX="88dp"
+        android:padding="12dp"
+        android:background="@drawable/custom_button"
+        android:textColor="@color/white"
+        tools:layout_editor_absoluteY="66dp" />
 </android.support.constraint.ConstraintLayout>
