@@ -13,4 +13,9 @@ public interface AppConfig {
 
     String INTENT_EXTRA_KEY = "SNACKBAR_MESSAGE";
 
+    int TYPE_DATA_RECENT = 0;
+    int TYPE_DATA_TREND = 1;
+    int TYPE_DATA_USER = 2;
+    int TYPE_DATA_SEARCH = 3;
+
 }

@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment mFragment;
     private FragmentManager mFragmentManager;
 
-    private int lastFragmentLoad = 0;
+    private int lastFragmentLoad = R.id.navigation_recent;
 
     private CoordinatorLayout mCoordLayout;
     private Snackbar mSnackbar;
@@ -40,12 +40,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (item.getItemId()) {
                 case R.id.navigation_recent:
                     if (item.getItemId() != lastFragmentLoad) {
-                        mFragment = JDMFragment.newInstance(false);
+                        mFragment = JDMFragment.newInstance(AppConfig.TYPE_DATA_RECENT);
                     }
                     break;
                 case R.id.navigation_trending:
                     if (item.getItemId() != lastFragmentLoad) {
-                        mFragment = JDMFragment.newInstance(true);
+                        mFragment = JDMFragment.newInstance(AppConfig.TYPE_DATA_TREND);
                     }
                     break;
                 case R.id.navigation_versus:
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        loadFragment(JDMFragment.newInstance(false));
+        loadFragment(JDMFragment.newInstance(AppConfig.TYPE_DATA_RECENT));
 
         String extrasValue = getIntent().getStringExtra(AppConfig.INTENT_EXTRA_KEY);
         if (extrasValue != null) {
@@ -159,12 +159,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_about) {
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
-            finish();
 
         } else if(id == R.id.nav_account){
             Intent intent = new Intent(MainActivity.this, CompteActivity.class);
             startActivity(intent);
-            finish();
 
         } else if(id == R.id.nav_logout) {
             SessionManager session = new SessionManager(getApplicationContext());

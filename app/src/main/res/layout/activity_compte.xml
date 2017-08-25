@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin"
     tools:context="com.pyozer.keskonsmar.CompteActivity">
 
     <TextView
-        android:id="@+id/pseudo"
+        android:id="@+id/account_pseudo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="Pseudo"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textSize="50px"
-        tools:layout_editor_absoluteX="140dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:textSize="28sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/account_title_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Actions"
+        android:textSize="18sp"
+        android:layout_marginTop="25dp"
+        android:layout_below="@id/account_pseudo" />
 
     <Button
-        android:id="@+id/chg_mdp"
+        android:id="@+id/account_change_mdp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Changer le mot de passe"
-        tools:layout_editor_absoluteX="88dp"
-        android:padding="12dp"
+        android:padding="17dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/custom_button"
         android:textColor="@color/white"
-        tools:layout_editor_absoluteY="66dp" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_below="@id/account_title_action" />
+
+</RelativeLayout>

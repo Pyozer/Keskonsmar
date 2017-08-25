@@ -1,6 +1,7 @@
 package com.pyozer.keskonsmar;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,7 +34,7 @@ import java.util.List;
 
 public class JDMFragment extends Fragment {
 
-    private boolean isTrend = false;
+    private int typeData = 0;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -43,9 +45,9 @@ public class JDMFragment extends Fragment {
 
     private View mView;
 
-    public static JDMFragment newInstance(boolean isTrend) {
+    public static JDMFragment newInstance(int typeData) {
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isTrend", isTrend);
+        bundle.putInt("typeData", typeData);
 
         JDMFragment fragment = new JDMFragment();
         fragment.setArguments(bundle);
@@ -55,7 +57,7 @@ public class JDMFragment extends Fragment {
 
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
-            isTrend = bundle.getBoolean("isTrend");
+            typeData = bundle.getInt("typeData");
         }
     }
 
@@ -80,7 +82,37 @@ public class JDMFragment extends Fragment {
             public void onClick(View view, int position) {
                 JeuDeMot data = mListJdm.get(position);
 
-                // TODO: Faire quelques chose quand on clique sur un JDM
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                alertDialog.setTitle(data.getJeuDeMot());
+                alertDialog.setMessage("par " + data.getAuteur());
+                alertDialog.setCancelable(true);
+
+                alertDialog.setPositiveButton(
+                        "C'est nul",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                alertDialog.setNegativeButton(
+                        "Pas mal",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                alertDialog.setNeutralButton(
+                        "Du génie",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = alertDialog.create();
+                alert11.show();
             }
 
             @Override
@@ -107,6 +139,11 @@ public class JDMFragment extends Fragment {
         mSwipeRefreshLayout.setRefreshing(true);
 
         String url = AppConfig.ADDR_SERVER + "get_data.php";
+
+        if (typeData == AppConfig.TYPE_DATA_USER) {
+            SessionManager session = new SessionManager(getContext());
+            url = AppConfig.ADDR_SERVER + "get_data.php?searchUser=" + session.getPseudo();
+        }
 
         JsonArrayRequest jsonRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {

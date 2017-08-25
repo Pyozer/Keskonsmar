@@ -1,8 +1,8 @@
 package com.pyozer.keskonsmar;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 public class CompteActivity extends AppCompatActivity {
@@ -22,7 +22,8 @@ public class CompteActivity extends AppCompatActivity {
             finish();
         }
 
-        TextView pseudo = (TextView) findViewById(R.id.pseudo);
+        TextView pseudo = (TextView) findViewById(R.id.account_pseudo);
         pseudo.setText(session.getPseudo());
+
     }
 }
