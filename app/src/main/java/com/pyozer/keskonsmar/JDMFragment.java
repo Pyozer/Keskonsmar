@@ -141,6 +141,8 @@ public class JDMFragment extends Fragment {
 
         if (typeData == AppConfig.TYPE_DATA_USER) {
             url = AppConfig.ADDR_SERVER + "get_data.php?searchUser=" + data;
+        } else if (typeData == AppConfig.TYPE_DATA_SEARCH) {
+            url = AppConfig.ADDR_SERVER + "get_data.php?searchJDM=" + data;
         }
 
         JsonArrayRequest jsonRequest = new JsonArrayRequest
