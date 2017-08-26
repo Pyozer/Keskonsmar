@@ -78,10 +78,10 @@
     <!-- A PROPOS -->
     <string name="about_whatIsIt">Qu\'est-ce que c\'est</string>
     <string name="about_whatIsIt_text">
-        "Cette application permet de publier et de voir des jeux de mots, plus ou moins drôle.\n"
-        "Grâce à votre compte, vous pouvez publier vos jeux de mots (aka JDM).\n"
-        "Chaque utilisateur à la possibilité d'aimer ou non un JDM. Selon le taux de like/dislike, celui-ci sera classé dans les tendances.\n"
-        "Liker un JDM revient à lui ajouté 1 degré. Dislike un JDM lui retire 1 degré.\n"
+        "Cette application permet de publier et de voir des jeux de mots, plus ou moins drôle.\n\n"
+        "Grâce à votre compte, vous pouvez publier vos jeux de mots (aka JDM).\n\n"
+        "Chaque utilisateur à la possibilité d'aimer ou non un JDM. Selon le taux de like/dislike, celui-ci sera classé dans les tendances.\n\n"
+        "Liker un JDM revient à lui ajouté 1 degré. Dislike un JDM lui retire 1 degré."
     </string>
 
     <string name="about_who">Auteurs</string>
