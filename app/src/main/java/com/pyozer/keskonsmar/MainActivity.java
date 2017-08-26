@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         SessionManager session = new SessionManager(getApplicationContext());
-        if(!session.isLoggedIn()) {
+        if (!session.isLoggedIn()) {
             session.logout();
 
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -159,12 +159,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_about) {
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
-
-        } else if(id == R.id.nav_account){
-            Intent intent = new Intent(MainActivity.this, CompteActivity.class);
+        } else if (id == R.id.nav_account_jdm) {
+            Intent intent = new Intent(MainActivity.this, AccountJDMActivity.class);
             startActivity(intent);
 
-        } else if(id == R.id.nav_logout) {
+        } else if (id == R.id.nav_account_mdp) {
+            Intent intent = new Intent(MainActivity.this, AccountMDPActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_logout) {
             SessionManager session = new SessionManager(getApplicationContext());
 
             session.logout();

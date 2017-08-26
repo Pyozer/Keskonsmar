@@ -35,6 +35,7 @@ import java.util.List;
 public class JDMFragment extends Fragment {
 
     private int typeData = 0;
+    private String data;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -46,8 +47,13 @@ public class JDMFragment extends Fragment {
     private View mView;
 
     public static JDMFragment newInstance(int typeData) {
+        return newInstance(typeData, "");
+    }
+
+    public static JDMFragment newInstance(int typeData, String data) {
         Bundle bundle = new Bundle();
         bundle.putInt("typeData", typeData);
+        bundle.putString("data", data);
 
         JDMFragment fragment = new JDMFragment();
         fragment.setArguments(bundle);
@@ -58,6 +64,7 @@ public class JDMFragment extends Fragment {
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
             typeData = bundle.getInt("typeData");
+            data = bundle.getString("data");
         }
     }
 
@@ -133,8 +140,7 @@ public class JDMFragment extends Fragment {
         String url = AppConfig.ADDR_SERVER + "get_data.php";
 
         if (typeData == AppConfig.TYPE_DATA_USER) {
-            SessionManager session = new SessionManager(getContext());
-            url = AppConfig.ADDR_SERVER + "get_data.php?searchUser=" + session.getPseudo();
+            url = AppConfig.ADDR_SERVER + "get_data.php?searchUser=" + data;
         }
 
         JsonArrayRequest jsonRequest = new JsonArrayRequest
@@ -163,6 +169,7 @@ public class JDMFragment extends Fragment {
                         mJdmAdapter.notifyDataSetChanged();
 
                         mSwipeRefreshLayout.setRefreshing(false);
+
                     }
                 }, new Response.ErrorListener() {
 
@@ -182,7 +189,7 @@ public class JDMFragment extends Fragment {
     }
 
     // Permet de vérifier la connexion internet
-    public boolean checkInternet() {
+    private boolean checkInternet() {
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {

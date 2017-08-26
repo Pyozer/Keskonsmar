@@ -104,8 +104,8 @@ public class LoginActivity extends AppCompatActivity {
         mInputPassword.setError(null);
 
         // Store values at the time of the login attempt.
-        String user = mInputUser.getText().toString();
-        String password = mInputPassword.getText().toString();
+        String user = mInputUser.getText().toString().trim();
+        String password = mInputPassword.getText().toString().trim();
 
         boolean cancel = false;
         View focusView = null;

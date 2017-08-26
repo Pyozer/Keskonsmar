@@ -36,7 +36,7 @@
             android:theme="@style/AppTheme.UI.NoActionBar" />
         <activity
             android:name=".AboutActivity"
-            android:label="@string/title_activity_about"
+            android:label="@string/activity_title_about"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -46,8 +46,13 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CompteActivity"
-            android:label="@string/title_activity_account"
+            android:name=".AccountJDMActivity"
+            android:label="@string/activity_title_account_jdm"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AccountMDPActivity"
+            android:label="@string/activity_title_account_mdp"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
     </application>

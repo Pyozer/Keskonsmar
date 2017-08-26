@@ -16,15 +16,16 @@
     <string name="activity_title_add_jdm">Nouveau JDM</string>
     <string name="activity_title_login">Connexion</string>
     <string name="activity_title_register">Inscription</string>
-    <string name="title_activity_about">A propos</string>
-    <string name="title_activity_account">Mon compte</string>
+    <string name="activity_title_about">A propos</string>
+    <string name="activity_title_account_jdm">Mes JDM</string>
+    <string name="activity_title_account_mdp">Mon mot de passe</string>
 
 
     <!-- ERREURS -->
     <string name="no_internet">Aucune connexion internet !</string>
     <string name="error_http">Erreur lors du chargement des données :/</string>
-    <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
-    <string name="error_field_required">Ce champs de texte est obligatoire</string>
+    <string name="error_incorrect_password">Ce mot de passe est incorrect.</string>
+    <string name="error_field_required">Ce champs de texte est obligatoire.</string>
     <string name="error_account_unknown">Le compte auquelle vous êtes connecté n\'est pas reconnu :/</string>
 
 
@@ -65,14 +66,23 @@
     <string name="navigation_drawer_close">Fermer menu latéral</string>
 
     <string name="nav_app_info">L\'application</string>
-    <string name="nav_about">A propos</string>
-    <string name="nav_account">Mon compte</string>
+    <string name="nav_account">L\'application</string>
     <string name="nav_logout">Déconnexion</string>
     <string name="logout_loader">Déconnexion en cours…</string>
 
     <!-- DECONNEXION -->
     <string name="snackbar_logout_success">Vous êtes à présent déconnecté.</string>
     <string name="snackbar_not_login">Vous devez être connecté !</string>
+
+    <!-- MODIFIER MOT DE PASSE -->
+    <string name="account_mdp_actual">Mot de passe actuel</string>
+    <string name="account_mdp_new">Votre nouveau mot de passe</string>
+    <string name="account_mdp_new_conf">Confirmer nouveau mot de passe</string>
+    <string name="account_mdp_submit">Confirmer</string>
+    <string name="account_mdp_cancel">Annuler</string>
+    <string name="account_mdp_loader">Changement de votre mot de passe…</string>
+    <string name="account_mdp_actual_wrong">Le mot de passe actuel saisie est incorrect.</string>
+    <string name="account_mdp_success">Votre mot de passe a bien été changé.</string>
 
 
     <!-- A PROPOS -->

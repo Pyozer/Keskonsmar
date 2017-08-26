@@ -54,6 +54,10 @@ public class SessionManager {
         return pref.getString(AppConfig.PREF_KEY_ACCOUNT_PSEUDO, null);
     }
 
+    public String getPassword(){
+        return pref.getString(AppConfig.PREF_KEY_ACCOUNT_PASSWORD, null);
+    }
+
     public boolean isLoggedIn(){
         return pref.getBoolean(AppConfig.PREF_KEY_IS_LOGGEDIN, false);
     }
