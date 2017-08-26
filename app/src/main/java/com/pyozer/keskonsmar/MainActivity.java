@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         mFragment = JDMFragment.newInstance(AppConfig.TYPE_DATA_TREND);
                     }
                     break;
-                case R.id.navigation_versus:
+                case R.id.navigation_worst:
                     if (item.getItemId() != lastFragmentLoad) {
-                        mFragment = new AccountFragment();
+                        mFragment = JDMFragment.newInstance(AppConfig.TYPE_DATA_RECENT);
                     }
                     break;
             }

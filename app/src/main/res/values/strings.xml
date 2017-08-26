@@ -3,15 +3,11 @@
     <string name="app_slogan">Après tout c\'est pas si drôle</string>
 
     <string name="img_desc">Logo de Keskonsmar</string>
-    <string name="like_desc">Bouton like</string>
-    <string name="dislike_desc">Bouton dislike</string>
-    <string name="comment_desc">Bouton commentaire</string>
-
 
     <!-- MENU DU BAS -->
-    <string name="title_recent">Derniers ajoutés</string>
+    <string name="title_recent">Nouveaux</string>
     <string name="title_trending">Tendances</string>
-    <string name="title_versus">Versus</string>
+    <string name="title_worst">Les plus nul</string>
 
     <string name="action_search">Rechercher</string>
 
@@ -82,14 +78,15 @@
     <!-- A PROPOS -->
     <string name="about_whatIsIt">Qu\'est-ce que c\'est</string>
     <string name="about_whatIsIt_text">
-        "Cette application permet de publier et de voir des jeux de mots, plus ou moins drôle."
-        "Grâce à votre compte, vous pouvez publier vos jeux de mots (aka JDM)."
-        "Chaque utilisateur à la possibilité de liker ou de dislike un JDM. Selon le taux de like/dislike, celui-ci sera classé dans les tendances."
+        "Cette application permet de publier et de voir des jeux de mots, plus ou moins drôle.\n"
+        "Grâce à votre compte, vous pouvez publier vos jeux de mots (aka JDM).\n"
+        "Chaque utilisateur à la possibilité d'aimer ou non un JDM. Selon le taux de like/dislike, celui-ci sera classé dans les tendances.\n"
+        "Liker un JDM revient à lui ajouté 1 degré. Dislike un JDM lui retire 1 degré.\n"
     </string>
 
     <string name="about_who">Auteurs</string>
     <string name="about_who_text">
-        "Jean-Charles Moussé"
+        "Jean-Charles Moussé\n"
         "Quentin Louet"
     </string>
 

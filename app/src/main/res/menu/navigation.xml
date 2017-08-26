@@ -12,8 +12,8 @@
         android:title="@string/title_trending" />
 
     <item
-        android:id="@+id/navigation_versus"
-        android:icon="@drawable/ic_compare_arrows_black_24dp"
-        android:title="@string/title_versus" />
+        android:id="@+id/navigation_worst"
+        android:icon="@drawable/ic_trending_down_black_24dp"
+        android:title="@string/title_worst" />
 
 </menu>
