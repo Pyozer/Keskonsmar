@@ -90,8 +90,8 @@ public class JDMFragment extends Fragment {
                 JeuDeMot data = mListJdm.get(position);
 
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-                alertDialog.setTitle(data.getJeuDeMot());
-                alertDialog.setMessage("par " + data.getAuteur());
+                alertDialog.setTitle(data.getTextJdm());
+                alertDialog.setMessage("par " + data.getAuteurJdm());
                 alertDialog.setCancelable(true);
 
                 alertDialog.setPositiveButton(
@@ -158,10 +158,17 @@ public class JDMFragment extends Fragment {
 
                                 int id_jdm = jdmObject.getInt("id_jdm");
                                 String text_jdm = jdmObject.getString("text_jdm");
-                                String auteur_jdm = jdmObject.getString("pseudo_user");
                                 String date_jdm = jdmObject.getString("date_jdm");
+                                int like_jdm = jdmObject.getInt("like_jdm");
+                                int dislike_jdm = jdmObject.getInt("dislike_jdm");
 
-                                mListJdm.add(new JeuDeMot(id_jdm, text_jdm, auteur_jdm, date_jdm));
+                                mListJdm.add(new JeuDeMot(
+                                        id_jdm,
+                                        text_jdm,
+                                        new Auteur(jdmObject.getInt("id_user"), jdmObject.getString("pseudo_user")),
+                                        date_jdm,
+                                        like_jdm,
+                                        dislike_jdm));
                             }
 
                         } catch (JSONException e) {

@@ -16,12 +16,14 @@ class JeuDeMotAdapter extends RecyclerView.Adapter<JeuDeMotAdapter.MyViewHolder>
         TextView auteur;
         TextView date;
         TextView jeuDeMot;
+        TextView degre;
 
         MyViewHolder(View view) {
             super(view);
             auteur = (TextView) view.findViewById(R.id.jdm_auteur);
             date = (TextView) view.findViewById(R.id.jdm_date);
             jeuDeMot = (TextView) view.findViewById(R.id.jdm_jeuDeMot);
+            degre = (TextView) view.findViewById(R.id.jdm_degre);
         }
     }
 
@@ -40,9 +42,10 @@ class JeuDeMotAdapter extends RecyclerView.Adapter<JeuDeMotAdapter.MyViewHolder>
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         JeuDeMot jeuDeMot = jeuDeMotList.get(position);
-        holder.auteur.setText(jeuDeMot.getAuteur());
-        holder.date.setText(jeuDeMot.getDate());
-        holder.jeuDeMot.setText(jeuDeMot.getJeuDeMot());
+        holder.auteur.setText(jeuDeMot.getAuteurJdm().toString());
+        holder.date.setText(jeuDeMot.getDateJdm());
+        holder.jeuDeMot.setText(jeuDeMot.getTextJdm());
+        holder.degre.setText(String.valueOf(jeuDeMot.getDegreJdm()) + "°");
     }
 
     @Override
