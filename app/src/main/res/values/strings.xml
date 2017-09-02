@@ -27,6 +27,9 @@
     <string name="error_incorrect_password">Ce mot de passe est incorrect.</string>
     <string name="error_field_required">Ce champs de texte est obligatoire.</string>
     <string name="error_account_unknown">Le compte auquelle vous êtes connecté n\'est pas reconnu :/</string>
+    <string name="error_not_email">Email incorrect !</string>
+    <string name="error_weak_password">Mot de passe trop facile</string>
+    <string name="error_user_exists">L\'utilisateur existe déjà !</string>
 
 
     <!-- AJOUT JDM -->
@@ -46,10 +49,12 @@
     <string name="login_action_submit">Connexion</string>
     <string name="login_link_register">Pas de compte ? Inscrivez-vous.</string>
     <string name="login_loader">Connexion en cours…</string>
+    <string name="login_failed">Connexion échoué !</string>
 
 
     <!-- INSCRIPTION -->
     <string name="register_title">Inscription</string>
+    <string name="register_label_email">Adresse mail</string>
     <string name="register_label_user">Pseudo</string>
     <string name="register_label_password">Mot de passe</string>
     <string name="register_label_password_conf">Confirmer mot de passe</string>
@@ -59,6 +64,7 @@
     <string name="register_champ_vide">Il faut remplir toutes les champs de texte.</string>
     <string name="register_link_login">Déjà membre ? Connectez-vous.</string>
     <string name="register_loader">Inscription en cours…</string>
+    <string name="register_failed">Inscription échoué !</string>
 
 
     <!-- MENU LATERAL -->
@@ -66,7 +72,7 @@
     <string name="navigation_drawer_close">Fermer menu latéral</string>
 
     <string name="nav_app_info">L\'application</string>
-    <string name="nav_account">L\'application</string>
+    <string name="nav_account">Mon compte</string>
     <string name="nav_logout">Déconnexion</string>
     <string name="logout_loader">Déconnexion en cours…</string>
 
@@ -99,5 +105,7 @@
         "Jean-Charles Moussé\n"
         "Quentin Louet"
     </string>
+
+    <string name="dialog_loading">Chargement…</string>
 
 </resources>

@@ -1,6 +1,5 @@
 package com.pyozer.keskonsmar;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -18,14 +17,21 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.pyozer.keskonsmar.fragments.JDMFragment;
+import com.pyozer.keskonsmar.fragments.LastJdmFragment;
+import com.pyozer.keskonsmar.fragments.SearchJdmFragment;
+import com.pyozer.keskonsmar.fragments.TopJdmFragment;
+import com.pyozer.keskonsmar.fragments.WorstJdmFragment;
+
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Fragment mFragment;
     private FragmentManager mFragmentManager;
@@ -43,17 +49,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (item.getItemId()) {
                 case R.id.navigation_recent:
                     if (item.getItemId() != lastFragmentLoad) {
-                        mFragment = JDMFragment.newInstance(AppConfig.TYPE_DATA_RECENT);
+                        mFragment = new LastJdmFragment();
                     }
                     break;
                 case R.id.navigation_trending:
                     if (item.getItemId() != lastFragmentLoad) {
-                        mFragment = JDMFragment.newInstance(AppConfig.TYPE_DATA_TREND);
+                        mFragment = new TopJdmFragment();
                     }
                     break;
                 case R.id.navigation_worst:
                     if (item.getItemId() != lastFragmentLoad) {
-                        mFragment = JDMFragment.newInstance(AppConfig.TYPE_DATA_RECENT);
+                        mFragment = new WorstJdmFragment();
                     }
                     break;
             }
@@ -71,16 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        SessionManager session = new SessionManager(getApplicationContext());
-        if (!session.isLoggedIn()) {
-            session.logout();
-
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_not_login));
-            startActivity(intent);
-            finish();
-        }
 
         mFragmentManager = getSupportFragmentManager();
 
@@ -107,12 +103,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        loadFragment(JDMFragment.newInstance(AppConfig.TYPE_DATA_RECENT));
+        loadFragment(new LastJdmFragment());
 
         String extrasValue = getIntent().getStringExtra(AppConfig.INTENT_EXTRA_KEY);
         if (extrasValue != null) {
             mSnackbar = Snackbar.make(mCoordLayout, extrasValue, Snackbar.LENGTH_LONG);
             mSnackbar.show();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser == null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_not_login));
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -139,9 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
         SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
         search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
@@ -151,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public boolean onQueryTextChange(String query) {
-                mFragment = JDMFragment.newInstance(AppConfig.TYPE_DATA_SEARCH, query);
+                mFragment = SearchJdmFragment.newInstance(query.trim());
                 loadFragment(mFragment);
                 return true;
 
@@ -194,15 +201,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
 
         } else if (id == R.id.nav_logout) {
-            SessionManager session = new SessionManager(getApplicationContext());
+            // Session manager
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            mAuth.signOut();
 
-            session.logout();
-
-            ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
-            pDialog.setIndeterminate(true);
-            pDialog.setMessage(getString(R.string.logout_loader));
-            pDialog.setCancelable(false);
-            pDialog.show();
+            showProgressDialog(getString(R.string.logout_loader));
 
             // On met un timer de 1,5sec
             Handler handler = new Handler();

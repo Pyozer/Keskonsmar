@@ -1,0 +1,58 @@
+{
+  "project_info": {
+    "project_number": "31941824345",
+    "firebase_url": "https://keskonsmar-ec6e9.firebaseio.com",
+    "project_id": "keskonsmar-ec6e9",
+    "storage_bucket": "keskonsmar-ec6e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31941824345:android:e794a3a50c6f8dee",
+        "android_client_info": {
+          "package_name": "com.pyozer.keskonsmar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31941824345-vke85q3gvksgl1e35rkelrdagsgaj6ge.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pyozer.keskonsmar",
+            "certificate_hash": "25283b62a3438d9f3865ccd9d8086ffdaca63c61"
+          }
+        },
+        {
+          "client_id": "31941824345-e5n6ha0toj7tmapi772j6hq8u6fidu84.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYxLlBcmFsOAphy3e_Hmd2xDYHqkomJ3g"
+        },
+        {
+          "current_key": "AIzaSyBz7aXZN9ugGHdTxmM6V14jRv5pkU6WTMg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31941824345-e5n6ha0toj7tmapi772j6hq8u6fidu84.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

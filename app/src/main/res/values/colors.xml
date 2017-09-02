@@ -26,7 +26,9 @@
     <color name="authorColor">#474747</color>
     <color name="statColor">#555555</color>
     <color name="dateColor">#727272</color>
-    <color name="iconColor">#414141</color>
+    <color name="iconColor">#616161</color>
+    <color name="likeColor">#2260cc</color>
+    <color name="dislikeColor">#F44336</color>
 
     <color name="md_red_500">#F44336</color>
     <color name="md_indigo_500">#3F51B5</color>

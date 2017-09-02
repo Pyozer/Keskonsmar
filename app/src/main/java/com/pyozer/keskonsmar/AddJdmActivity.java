@@ -1,37 +1,38 @@
 package com.pyozer.keskonsmar;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.pyozer.keskonsmar.models.JeuDeMot;
+import com.pyozer.keskonsmar.models.User;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+public class AddJdmActivity extends BaseActivity {
 
-public class AddJdmActivity extends AppCompatActivity {
+    private final static String TAG = "AddJdmActivity";
 
     private EditText mInputJdm;
+    private Button mSubmitButton;
 
     private LinearLayout mAddJdmLayout;
 
     private Snackbar mSnackbar;
-    private ProgressDialog pDialog;
 
-    private JsonObjectRequest mAuthTask = null;
-
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +43,7 @@ public class AddJdmActivity extends AppCompatActivity {
 
         mInputJdm = (EditText) findViewById(R.id.add_input_jdm);
 
-        pDialog = new ProgressDialog(AddJdmActivity.this);
-        pDialog.setIndeterminate(true);
-        pDialog.setMessage(getString(R.string.add_send_loader));
-        pDialog.setCancelable(false);
-
-        Button mSubmitButton = (Button) findViewById(R.id.add_action_submit);
+        mSubmitButton = (Button) findViewById(R.id.add_action_submit);
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,8 +51,7 @@ public class AddJdmActivity extends AppCompatActivity {
             }
         });
 
-        TextView mCancelLink = (TextView) findViewById(R.id.add_action_cancel);
-        mCancelLink.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.add_action_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -65,96 +60,76 @@ public class AddJdmActivity extends AppCompatActivity {
             }
         });
 
-        SessionManager session = new SessionManager(getApplicationContext());
-        if(!session.isLoggedIn()) {
-            session.logout();
-
-            Intent intent = new Intent(AddJdmActivity.this, LoginActivity.class);
-            intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_not_login));
-            startActivity(intent);
-            finish();
-        }
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     private void addNewJdm() {
-        String jdm = mInputJdm.getText().toString().trim();
+        mInputJdm.setError(null);
 
-        SharedPreferences sharedPref = getSharedPreferences(AppConfig.PREF_KEY_ACCOUNT, MODE_PRIVATE);
-        int idUser = sharedPref.getInt(AppConfig.PREF_KEY_ACCOUNT_ID, -1);
+        final String jdm = mInputJdm.getText().toString().trim();
 
-        if(idUser != -1) {
-            if (jdm.length() > 0) {
-                check_jdm(idUser, jdm);
-            } else {
-                mSnackbar = Snackbar.make(mAddJdmLayout, getString(R.string.add_error), Snackbar.LENGTH_LONG);
-                mSnackbar.show();
-            }
-        } else {
-            mSnackbar = Snackbar.make(mAddJdmLayout, getString(R.string.error_account_unknown), Snackbar.LENGTH_LONG);
-            mSnackbar.show();
+        if (TextUtils.isEmpty(jdm)) {
+            mInputJdm.setError(getString(R.string.error_field_required));
+
+            return;
         }
+        setEditingEnabled(false);
 
-    }
+        // [START single_value_read]
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-    private void check_jdm(final int idUser, final String jdm) {
-
-        showDialog();
-
-        String url = AppConfig.ADDR_SERVER + "add_jdm.php?user=" + idUser + "&jdm=" + jdm;
-
-        mAuthTask = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(
+                new ValueEventListener() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        // the response is already constructed as a JSONObject!
-                        mAuthTask = null;
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user value
+                        User user = dataSnapshot.getValue(User.class);
 
-                        hideDialog();
+                        if (user == null) {
+                            // User is null, error out
+                            Log.e(TAG, "User " + userId + " is unexpectedly null");
 
-                        try {
-                            boolean isJdmOk = response.getBoolean("status");
-
-                            if (isJdmOk) {
-                                Intent in = new Intent(AddJdmActivity.this, MainActivity.class);
-                                in.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.add_send_success));
-                                startActivity(in);
-                                finish();
-                            } else {
-                                mSnackbar = Snackbar.make(mAddJdmLayout, response.getString("msg"), Snackbar.LENGTH_LONG);
-                                mSnackbar.show();
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            mSnackbar = Snackbar.make(mAddJdmLayout, "Impossible de trouver l'utilisateur", Snackbar.LENGTH_LONG);
+                            mSnackbar.show();
+                        } else {
+                            // Write new post
+                            writeNewPost(userId, user, jdm);
                         }
 
+                        // Finish this Activity, back to the stream
+                        setEditingEnabled(true);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-                }, new Response.ErrorListener() {
 
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
 
-                        mAuthTask = null;
-
-                        hideDialog();
-
-                        mSnackbar = Snackbar.make(mAddJdmLayout, getString(R.string.error_http), Snackbar.LENGTH_LONG);
-                        mSnackbar.show();
+                        setEditingEnabled(true);
                     }
                 });
-
-        Volley.newRequestQueue(this).add(mAuthTask);
     }
 
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
+    private void writeNewPost(String userId, User user, String jdm) {
+        // Create new post at /posts/$postid
+        String key = mDatabase.child("posts").push().getKey();
+        JeuDeMot jeuDeMot = new JeuDeMot(userId, user.getUsername(), jdm);
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/posts/" + key, jeuDeMot.toMap());
+
+        mDatabase.updateChildren(childUpdates);
     }
 
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+    private void setEditingEnabled(boolean enabled) {
+        mInputJdm.setEnabled(enabled);
+        if (enabled) {
+            mSubmitButton.setVisibility(View.VISIBLE);
+        } else {
+            mSubmitButton.setVisibility(View.GONE);
+        }
     }
 
 }

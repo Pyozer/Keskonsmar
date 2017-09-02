@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_view"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
-    android:id="@+id/login_view"
     tools:context="com.pyozer.keskonsmar.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:paddingTop="50dp"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true">
+        android:paddingTop="50dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="50dp"
-            android:src="@drawable/logo"
-            android:contentDescription="@string/img_desc" />
+            android:contentDescription="@string/img_desc"
+            android:src="@drawable/logo" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/login_label_user"
-                android:inputType="text" />
+                android:inputType="textEmailAddress" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -61,10 +61,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
             android:layout_marginTop="24dp"
-            android:padding="12dp"
             android:background="@drawable/custom_button"
-            android:textColor="@color/white"
-            android:text="@string/login_action_submit" />
+            android:padding="12dp"
+            android:text="@string/login_action_submit"
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/login_to_register"
