@@ -16,6 +16,7 @@
     <string name="activity_title_add_jdm">Nouveau JDM</string>
     <string name="activity_title_login">Connexion</string>
     <string name="activity_title_register">Inscription</string>
+    <string name="activity_title_forgot_pass">Mot de passe oublié</string>
     <string name="activity_title_about">A propos</string>
     <string name="activity_title_account_jdm">Mes JDM</string>
     <string name="activity_title_account_mdp">Mon mot de passe</string>
@@ -27,9 +28,10 @@
     <string name="error_incorrect_password">Ce mot de passe est incorrect.</string>
     <string name="error_field_required">Ce champs de texte est obligatoire.</string>
     <string name="error_account_unknown">Le compte auquelle vous êtes connecté n\'est pas reconnu :/</string>
-    <string name="error_not_email">Email incorrect !</string>
+    <string name="error_not_email">Format de l\'email incorrect !</string>
     <string name="error_weak_password">Mot de passe trop facile</string>
     <string name="error_user_exists">L\'utilisateur existe déjà !</string>
+    <string name="error_login_failed">Identifiants incorrects !</string>
 
 
     <!-- AJOUT JDM -->
@@ -44,12 +46,12 @@
 
     <!-- CONNEXION -->
     <string name="login_title">Connexion</string>
-    <string name="login_label_user">Pseudo</string>
+    <string name="login_label_email">Adresse mail</string>
     <string name="login_label_password">Mot de passe</string>
     <string name="login_action_submit">Connexion</string>
     <string name="login_link_register">Pas de compte ? Inscrivez-vous.</string>
+    <string name="login_forget_pass">Mot de passe oublié ?</string>
     <string name="login_loader">Connexion en cours…</string>
-    <string name="login_failed">Connexion échoué !</string>
 
 
     <!-- INSCRIPTION -->
@@ -79,6 +81,7 @@
     <!-- DECONNEXION -->
     <string name="snackbar_logout_success">Vous êtes à présent déconnecté.</string>
     <string name="snackbar_not_login">Vous devez être connecté !</string>
+    <string name="snackbar_email_verif_send">Un email de vérification vous a été envoyé !</string>
 
     <!-- MODIFIER MOT DE PASSE -->
     <string name="account_mdp_actual">Mot de passe actuel</string>
@@ -107,5 +110,13 @@
     </string>
 
     <string name="dialog_loading">Chargement…</string>
+
+    <string name="forgot_pass_text">Mot de passe oublié ?</string>
+    <string name="forgot_pass_msg">Nous avons seulement besoin de votre adresse mail pour vous envoyer les instructions à suivres.</string>
+    <string name="forgot_pass_label_email">Adresse mail</string>
+    <string name="forgot_pass_label_submit">Valider</string>
+    <string name="forgot_pass_back">Retour</string>
+    <string name="forgot_pass_sent">Les instructions ont été envoyé à votre adresse mail.</string>
+    <string name="forgot_pass_sent_failed">L\'envoi des instructions a échoué :/</string>
 
 </resources>

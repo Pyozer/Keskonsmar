@@ -35,6 +35,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.UI.NoActionBar" />
         <activity
+            android:name=".ForgetPassActivity"
+            android:label="@string/activity_title_forgot_pass"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.UI.NoActionBar" />
+        <activity
             android:name=".AboutActivity"
             android:label="@string/activity_title_about"
             android:parentActivityName=".MainActivity"

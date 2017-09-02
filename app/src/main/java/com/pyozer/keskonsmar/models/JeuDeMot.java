@@ -13,6 +13,10 @@ public class JeuDeMot {
     public Map<String, Boolean> likes = new HashMap<>();
     public Map<String, Boolean> dislikes = new HashMap<>();
 
+    public int nbLikes = 0;
+    public int nbDislikes = 0;
+    public int degreJdm = 0;
+
     public JeuDeMot() {
     }
 
@@ -27,44 +31,49 @@ public class JeuDeMot {
         this.date = date;
     }
 
-    public String getDateFormated() {
-
-        long ecart = (System.currentTimeMillis() - Long.parseLong(date)) / 1000;
-
-        if (ecart < 60) return (int) ecart + "sec";
-        else if (ecart < 3600) return (int) Math.floor(ecart / 60) + "min";
-        else if (ecart < 86400) return (int) Math.floor(ecart / 3600) + "h";
-        else return (int) Math.floor(ecart / 86400) + "j";
-    }
-
     public int getNbLikes() {
-        return likes.size();
+        return nbLikes;
     }
-
-    public void addLike(String userUID) {
-        dislikes.remove(userUID);
-        likes.put(userUID, true);
-    }
-
-    public void unLike(String userUID) {
-        likes.remove(userUID);
-    }
-
     public int getNbDislikes() {
-        return dislikes.size();
+        return nbDislikes;
     }
 
-    public void addDislike(String userUID) {
-        likes.remove(userUID);
-        dislikes.put(userUID, true);
+    public void like(String userUID) {
+        if(dislikes.containsKey(userUID)) {
+            dislikes.remove(userUID);
+            nbDislikes--;
+        }
+        if(likes.containsKey(userUID)) {
+            likes.remove(userUID);
+            nbLikes--;
+        } else {
+            likes.put(userUID, true);
+            nbLikes++;
+        }
+        setDegreJdm();
     }
 
-    public void unDislike(String userUID) {
-        dislikes.remove(userUID);
+    public void dislike(String userUID) {
+        if(likes.containsKey(userUID)) {
+            likes.remove(userUID);
+            nbLikes--;
+        }
+        if(dislikes.containsKey(userUID)) {
+            dislikes.remove(userUID);
+            nbDislikes--;
+        } else {
+            dislikes.put(userUID, true);
+            nbDislikes++;
+        }
+        setDegreJdm();
+    }
+
+    public void setDegreJdm() {
+        degreJdm = getNbLikes() - getNbDislikes();
     }
 
     public int getDegreJdm() {
-        return getNbLikes() - getNbDislikes();
+        return degreJdm;
     }
 
     public Map<String, Object> toMap() {
@@ -74,8 +83,8 @@ public class JeuDeMot {
         result.put("jdm", jdm);
         result.put("likes", likes);
         result.put("dislikes", dislikes);
-        result.put("nbLikes", getNbLikes());
-        result.put("nbDislikes", getNbDislikes());
+        result.put("nbLikes", nbLikes);
+        result.put("nbDislikes", nbDislikes);
         result.put("degreJdm", getDegreJdm());
         result.put("date", date);
 

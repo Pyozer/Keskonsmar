@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +27,7 @@ public class RegisterActivity extends BaseActivity {
     private final static String TAG = "RegisterActivity";
 
     private EditText mInputUser;
+    private EditText mInputEmail;
     private EditText mInputPassword;
     private EditText mInputPasswordConf;
 
@@ -36,16 +38,19 @@ public class RegisterActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mRegisterLayout = (ScrollView) findViewById(R.id.register_view);
+        mRegisterLayout = findViewById(R.id.register_view);
 
-        mInputUser = (EditText) findViewById(R.id.register_input_user);
-        mInputPassword = (EditText) findViewById(R.id.register_input_password);
-        mInputPasswordConf = (EditText) findViewById(R.id.register_input_password_conf);
+        mInputUser = findViewById(R.id.register_input_user);
+        mInputEmail = findViewById(R.id.register_input_email);
+        mInputPassword = findViewById(R.id.register_input_password);
+        mInputPasswordConf = findViewById(R.id.register_input_password_conf);
 
         findViewById(R.id.register_action_submit).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,10 +83,12 @@ public class RegisterActivity extends BaseActivity {
     private void validateForm() {
 
         mInputUser.setError(null);
+        mInputEmail.setError(null);
         mInputPassword.setError(null);
         mInputPasswordConf.setError(null);
 
         String user = mInputUser.getText().toString().trim();
+        String email = mInputEmail.getText().toString().trim();
         String pass = mInputPassword.getText().toString().trim();
         String passConf = mInputPasswordConf.getText().toString().trim();
 
@@ -89,6 +96,10 @@ public class RegisterActivity extends BaseActivity {
 
         if (TextUtils.isEmpty(user)) {
             mInputUser.setError(getString(R.string.error_field_required));
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(email)) {
+            mInputEmail.setError(getString(R.string.error_field_required));
             cancel = true;
         }
         if (TextUtils.isEmpty(pass)) {
@@ -110,7 +121,6 @@ public class RegisterActivity extends BaseActivity {
         }
 
         if (!cancel) {
-            String email = user + "@keskonsmar.fr";
             registerUser(user, email, pass);
         }
     }
@@ -130,6 +140,11 @@ public class RegisterActivity extends BaseActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser userFirebase = mAuth.getCurrentUser();
 
+                            // Write new user
+                            writeNewUser(userFirebase.getUid(), username, userFirebase.getEmail());
+
+                            sendEmailVerif(userFirebase);
+
                             onAuthSuccess(userFirebase);
                         } else {
                             String error = getString(R.string.register_failed);
@@ -137,10 +152,10 @@ public class RegisterActivity extends BaseActivity {
                                 throw task.getException();
                             } catch (FirebaseAuthWeakPasswordException e) {
                                 error = getString(R.string.error_weak_password);
-                                mInputPassword.setError(error);
                             } catch (FirebaseAuthUserCollisionException e) {
                                 error = getString(R.string.error_user_exists);
-                                mInputUser.setError(error);
+                            } catch (FirebaseAuthEmailException e) {
+                                error = getString(R.string.error_not_email);
                             } catch (Exception e) {
                                 Log.e(TAG, e.getMessage());
                             }
@@ -154,23 +169,12 @@ public class RegisterActivity extends BaseActivity {
                 });
     }
 
-    private String usernameFromEmail(String email) {
-        if (email.contains("@")) {
-            return email.split("@")[0];
-        } else {
-            return email;
-        }
-    }
-
     private void onAuthSuccess(FirebaseUser user) {
         if (user != null) {
-            String username = usernameFromEmail(user.getEmail());
+            if(intent == null)
+                intent = new Intent(RegisterActivity.this, MainActivity.class);
 
-            // Write new user
-            writeNewUser(user.getUid(), username, user.getEmail());
-
-            // Go to MainActivity
-            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+            startActivity(intent);
             finish();
         }
     }
@@ -179,5 +183,16 @@ public class RegisterActivity extends BaseActivity {
         User user = new User(name, email);
 
         mDatabase.child("users").child(userId).setValue(user);
+    }
+
+    private void sendEmailVerif(FirebaseUser user) {
+        // Send verification email
+        user.sendEmailVerification().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                intent = new Intent(RegisterActivity.this, MainActivity.class);
+                intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_email_verif_send));
+            }
+        });
     }
 }

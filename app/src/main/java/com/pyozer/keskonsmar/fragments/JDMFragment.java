@@ -90,13 +90,7 @@ public abstract class JDMFragment extends Fragment {
                                     return Transaction.success(mutableData);
                                 }
 
-                                if (jdm.likes.containsKey(getUid())) {
-                                    // On unlike
-                                    jdm.unLike(getUid());
-                                } else {
-                                    // Si pas deja like on like
-                                    jdm.addLike(getUid());
-                                }
+                                jdm.like(getUid());
 
                                 // Set value and report transaction success
                                 mutableData.setValue(jdm);
@@ -122,13 +116,7 @@ public abstract class JDMFragment extends Fragment {
                                     return Transaction.success(mutableData);
                                 }
 
-                                if (jdm.dislikes.containsKey(getUid())) {
-                                    // On unlike
-                                    jdm.unDislike(getUid());
-                                } else {
-                                    // Si pas deja like on like
-                                    jdm.addDislike(getUid());
-                                }
+                                jdm.dislike(getUid());
 
                                 // Set value and report transaction success
                                 mutableData.setValue(jdm);

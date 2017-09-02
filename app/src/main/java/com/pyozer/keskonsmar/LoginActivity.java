@@ -15,10 +15,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthEmailException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.pyozer.keskonsmar.models.User;
 
 /**
  * A login screen that offers login via email/password.
@@ -28,26 +28,24 @@ public class LoginActivity extends BaseActivity {
     private final static String TAG = "LoginActivity";
 
     // UI references.
-    private EditText mInputUser;
+    private EditText mInputEmail;
     private EditText mInputPassword;
 
     private Snackbar mSnackbar;
-
     private ScrollView mLoginLayout;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mLoginLayout = (ScrollView) findViewById(R.id.login_view);
+        mLoginLayout = findViewById(R.id.login_view);
 
         // Set up the login form.
-        mInputUser = (EditText) findViewById(R.id.login_input_user);
-        mInputPassword = (EditText) findViewById(R.id.login_input_password);
+        mInputEmail = findViewById(R.id.login_input_email);
+        mInputPassword = findViewById(R.id.login_input_password);
 
         findViewById(R.id.login_action_submit).setOnClickListener(new OnClickListener() {
             @Override
@@ -58,15 +56,20 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.login_to_register).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+                finish();
+            }
+        });
+        findViewById(R.id.login_forget_pass).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), ForgetPassActivity.class));
                 finish();
             }
         });
 
         // Session manager
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         String extrasValue = getIntent().getStringExtra(AppConfig.INTENT_EXTRA_KEY);
         if (extrasValue != null) {
@@ -85,17 +88,17 @@ public class LoginActivity extends BaseActivity {
 
     private void validateForm() {
         // Reset errors.
-        mInputUser.setError(null);
+        mInputEmail.setError(null);
         mInputPassword.setError(null);
 
         // Store values at the time of the login attempt.
-        String user = mInputUser.getText().toString().trim();
-        final String password = mInputPassword.getText().toString().trim();
+        String user = mInputEmail.getText().toString().trim();
+        String password = mInputPassword.getText().toString().trim();
 
         boolean cancel = false;
 
         if (TextUtils.isEmpty(user)) {
-            mInputUser.setError(getString(R.string.error_field_required));
+            mInputEmail.setError(getString(R.string.error_field_required));
             cancel = true;
         }
         if (TextUtils.isEmpty(password)) {
@@ -104,7 +107,6 @@ public class LoginActivity extends BaseActivity {
         }
 
         if (!cancel) {
-            user += "@keskonsmar.fr";
             loginUser(user, password);
         }
     }
@@ -113,53 +115,46 @@ public class LoginActivity extends BaseActivity {
 
         showProgressDialog(getString(R.string.login_loader));
 
-        mAuth.signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        hideProgressDialog();
+        mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                hideProgressDialog();
 
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success");
 
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            onAuthSuccess(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-
-                            mSnackbar = Snackbar.make(mLoginLayout, getString(R.string.login_failed), Snackbar.LENGTH_LONG);
-                            mSnackbar.show();
-                        }
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    onAuthSuccess(user);
+                } else {
+                    String error = getString(R.string.error_login_failed);
+                    try {
+                        throw task.getException();
+                    } catch (FirebaseAuthInvalidCredentialsException e) {
+                        error = getString(R.string.error_login_failed);
+                    } catch (FirebaseAuthInvalidUserException e) {
+                        error = getString(R.string.error_account_unknown);
+                    } catch (FirebaseAuthEmailException e) {
+                        error = getString(R.string.error_not_email);
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
                     }
-                });
-    }
 
-    private String usernameFromEmail(String email) {
-        if (email.contains("@")) {
-            return email.split("@")[0];
-        } else {
-            return email;
-        }
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+
+                    mSnackbar = Snackbar.make(mLoginLayout, error, Snackbar.LENGTH_LONG);
+                    mSnackbar.show();
+                }
+            }
+        });
     }
 
     private void onAuthSuccess(FirebaseUser user) {
         if (user != null) {
-            String username = usernameFromEmail(user.getEmail());
-
-            // Write new user
-            writeNewUser(user.getUid(), username, user.getEmail());
-
             // Go to MainActivity
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
-    }
-
-    private void writeNewUser(String userId, String name, String email) {
-        User user = new User(name, email);
-
-        mDatabase.child("users").child(userId).setValue(user);
     }
 }

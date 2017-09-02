@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pyozer.keskonsmar.R;
+import com.pyozer.keskonsmar.Util;
 import com.pyozer.keskonsmar.models.JeuDeMot;
 
 public class JdmViewHolder extends RecyclerView.ViewHolder {
@@ -37,7 +38,7 @@ public class JdmViewHolder extends RecyclerView.ViewHolder {
 
     public void bindToPost(JeuDeMot jdm, View.OnClickListener likeClickListener, View.OnClickListener dislikeClickListener) {
         auteur.setText(jdm.auteur);
-        date.setText(jdm.getDateFormated());
+        date.setText(Util.getDateFormated(Long.parseLong(jdm.date)));
         jeuDeMot.setText(jdm.jdm);
         degre.setText(String.valueOf(jdm.getDegreJdm()) + "°");
 
