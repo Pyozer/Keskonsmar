@@ -33,7 +33,7 @@ public class HomeActivity extends BaseActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        //onAuthSuccess(currentUser);
+        onAuthSuccess(currentUser);
     }
 
 }

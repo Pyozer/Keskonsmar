@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.pyozer.keskonsmar.models.User;
 
 public class AccountActivity extends BaseActivity {
 
@@ -49,7 +51,7 @@ public class AccountActivity extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mAccountLayout = findViewById(R.id.account_mdp_layout);
+        mAccountLayout = findViewById(R.id.account_layout);
 
         findViewById(R.id.account_pseudo).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,13 +75,17 @@ public class AccountActivity extends BaseActivity {
 
         builder = new AlertDialog.Builder(this);
 
-        DatabaseReference myRef = mDatabase.child("users");
+        mUser = mAuth.getCurrentUser();
+        DatabaseReference myRef = mDatabase.child("users").child(mUser.getUid());
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String value = dataSnapshot.getValue(String.class);
+                User user = dataSnapshot.getValue(User.class);
 
-                Log.d(TAG, "Value is: " + value);
+                TextView pseudoText = findViewById(R.id.account_pseudo_text);
+                TextView emailText = findViewById(R.id.account_email_text);
+                pseudoText.setText(user.username);
+                emailText.setText(user.email);
             }
 
             @Override
@@ -111,15 +117,16 @@ public class AccountActivity extends BaseActivity {
         View dialogView = inflater.inflate(R.layout.dialog_edit_pseudo, null);
         builder.setView(dialogView);
 
-        final EditText inputPseudo = findViewById(R.id.input_new_pseudo);
+        final EditText inputPseudo = dialogView.findViewById(R.id.input_new_pseudo);
 
         // Set up the buttons
         builder.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String newPseudo = inputPseudo.getText().toString();
+                String newPseudo = inputPseudo.getText().toString().trim();
                 if (TextUtils.isEmpty(newPseudo)) {
-                    inputPseudo.setError(getString(R.string.error_field_required));
+                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_field_required), Snackbar.LENGTH_LONG);
+                    mSnackbar.show();
                 } else {
                     mDatabase.child("users").child(mUser.getUid()).child("username").setValue(newPseudo);
                 }
@@ -143,33 +150,36 @@ public class AccountActivity extends BaseActivity {
         View dialogView = inflater.inflate(R.layout.dialog_edit_email, null);
         builder.setView(dialogView);
 
-        final EditText inputEmail = findViewById(R.id.input_new_email);
+        final EditText inputEmail = dialogView.findViewById(R.id.input_new_email);
 
         // Set up the buttons
         builder.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String newEmail = inputEmail.getText().toString();
+                final String newEmail = inputEmail.getText().toString().trim();
 
                 if (TextUtils.isEmpty(newEmail)) {
-                    inputEmail.setError(getString(R.string.error_field_required));
+                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_field_required), Snackbar.LENGTH_LONG);
+                    mSnackbar.show();
                 } else {
                     mUser.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+                                mDatabase.child("users").child(mUser.getUid()).child("email").setValue(newEmail);
+
                                 mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.account_new_email_success), Snackbar.LENGTH_LONG);
                                 mSnackbar.show();
                                 Log.d(TAG, "User email address updated.");
                             } else {
+                                String error = getString(R.string.error_http);
                                 try {
                                     throw task.getException();
-                                } catch (FirebaseAuthEmailException e) {
-                                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_not_email), Snackbar.LENGTH_LONG);
-                                    mSnackbar.show();
                                 } catch (Exception e) {
-                                    Log.e(TAG, e.getMessage());
+                                    error = e.getMessage();
                                 }
+                                mSnackbar = Snackbar.make(mAccountLayout, error, Snackbar.LENGTH_LONG);
+                                mSnackbar.show();
                             }
                         }
                     });
@@ -195,8 +205,8 @@ public class AccountActivity extends BaseActivity {
         View dialogView = inflater.inflate(R.layout.dialog_edit_password, null);
         builder.setView(dialogView);
 
-        final EditText inputMdp = findViewById(R.id.input_new_mdp);
-        final EditText inputMdpConf = findViewById(R.id.input_new_mdp_conf);
+        final EditText inputMdp = dialogView.findViewById(R.id.input_new_mdp);
+        final EditText inputMdpConf = dialogView.findViewById(R.id.input_new_mdp_conf);
 
         // Set up the buttons
         builder.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
@@ -210,24 +220,26 @@ public class AccountActivity extends BaseActivity {
 
                 boolean isCancel = false;
 
-                if (TextUtils.isEmpty(newMdpConf)) {
-                    inputMdp.setError(getString(R.string.error_field_required));
-                    isCancel = true;
-                }
-                if (TextUtils.isEmpty(newMdp)) {
-                    inputMdpConf.setError(getString(R.string.error_field_required));
+                if (!newMdp.equals(newMdpConf)) {
+                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.register_mdp_dif), Snackbar.LENGTH_LONG);
                     isCancel = true;
                 }
                 if (newMdp.length() < AppConfig.MIN_PASS_LENGTH) {
-                    inputMdp.setError(getString(R.string.register_mdp_tcourt));
+                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.register_mdp_tcourt), Snackbar.LENGTH_LONG);
                     isCancel = true;
                 }
-                if (!newMdp.equals(newMdpConf)) {
-                    inputMdpConf.setError(getString(R.string.register_mdp_dif));
+                if (TextUtils.isEmpty(newMdpConf)) {
+                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_field_required), Snackbar.LENGTH_LONG);
+                    isCancel = true;
+                }
+                if (TextUtils.isEmpty(newMdp)) {
+                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_field_required), Snackbar.LENGTH_LONG);
                     isCancel = true;
                 }
 
-                if (!isCancel) {
+                if (isCancel) {
+                    mSnackbar.show();
+                } else {
                     mUser.updatePassword(newMdp).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -236,14 +248,16 @@ public class AccountActivity extends BaseActivity {
                                 mSnackbar.show();
                                 Log.d(TAG, "User password updated.");
                             } else {
+                                String error = getString(R.string.error_http);
                                 try {
                                     throw task.getException();
                                 } catch (FirebaseAuthWeakPasswordException e) {
-                                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_weak_password), Snackbar.LENGTH_LONG);
-                                    mSnackbar.show();
+                                    error = getString(R.string.error_weak_password);
                                 } catch (Exception e) {
-                                    Log.e(TAG, e.getMessage());
+                                    error = e.getMessage();
                                 }
+                                mSnackbar = Snackbar.make(mAccountLayout, error, Snackbar.LENGTH_LONG);
+                                mSnackbar.show();
                             }
                         }
                     });

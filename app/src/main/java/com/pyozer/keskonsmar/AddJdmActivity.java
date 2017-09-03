@@ -117,7 +117,7 @@ public class AddJdmActivity extends BaseActivity {
     private void writeNewPost(String userId, User user, String jdm) {
         // Create new post at /posts/$postid
         String key = mDatabase.child("posts").push().getKey();
-        JeuDeMot jeuDeMot = new JeuDeMot(userId, user.getUsername(), jdm);
+        JeuDeMot jeuDeMot = new JeuDeMot(userId, user.username, jdm);
 
         Map<String, Object> jdmValues = jeuDeMot.toMap();
         jdmValues.put("timestamp", ServerValue.TIMESTAMP);

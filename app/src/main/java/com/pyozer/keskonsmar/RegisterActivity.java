@@ -156,7 +156,7 @@ public class RegisterActivity extends BaseActivity {
                             } catch (FirebaseAuthEmailException e) {
                                 error = getString(R.string.error_not_email);
                             } catch (Exception e) {
-                                Log.e(TAG, e.getMessage());
+                                error = e.getMessage();
                             }
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
