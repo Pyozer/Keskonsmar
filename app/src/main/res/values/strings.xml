@@ -19,7 +19,7 @@
     <string name="activity_title_forgot_pass">Mot de passe oublié</string>
     <string name="activity_title_about">A propos</string>
     <string name="activity_title_account_jdm">Mes JDM</string>
-    <string name="activity_title_account_mdp">Mon mot de passe</string>
+    <string name="activity_title_account">Mon profil</string>
 
 
     <!-- ERREURS -->
@@ -84,15 +84,14 @@
     <string name="snackbar_email_verif_send">Un email de vérification vous a été envoyé !</string>
 
     <!-- MODIFIER MOT DE PASSE -->
-    <string name="account_mdp_actual">Mot de passe actuel</string>
-    <string name="account_mdp_new">Votre nouveau mot de passe</string>
-    <string name="account_mdp_new_conf">Confirmer nouveau mot de passe</string>
-    <string name="account_mdp_submit">Confirmer</string>
-    <string name="account_mdp_cancel">Annuler</string>
-    <string name="account_mdp_loader">Changement de votre mot de passe…</string>
-    <string name="account_mdp_actual_wrong">Le mot de passe actuel saisie est incorrect.</string>
-    <string name="account_mdp_success">Votre mot de passe a bien été changé.</string>
-
+    <string name="account_new_mdp">Nouveau mot de passe</string>
+    <string name="account_new_mdp_conf">Confirmer nouveau mot de passe</string>
+    <string name="account_new_mdp_loader">Changement de votre mot de passe…</string>
+    <string name="account_new_mdp_success">Votre mot de passe a bien été changé.</string>
+    <string name="account_new_email">Nouvelle adresse mail</string>
+    <string name="account_new_email_success">Votre adresse mail a bien été changé.</string>
+    <string name="account_new_pseudo">Nouveau pseudo</string>
+    <string name="account_new_pseudo_success">Votre pseudo a bien été changé.</string>
 
     <!-- A PROPOS -->
     <string name="about_whatIsIt">Qu\'est-ce que c\'est</string>

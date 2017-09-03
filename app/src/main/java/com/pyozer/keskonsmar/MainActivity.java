@@ -1,7 +1,5 @@
 package com.pyozer.keskonsmar;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +15,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +23,6 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pyozer.keskonsmar.fragments.LastJdmFragment;
-import com.pyozer.keskonsmar.fragments.SearchJdmFragment;
 import com.pyozer.keskonsmar.fragments.TopJdmFragment;
 import com.pyozer.keskonsmar.fragments.WorstJdmFragment;
 
@@ -142,28 +138,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-
-        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                mFragment = SearchJdmFragment.newInstance(query.trim());
-                loadFragment(mFragment);
-                return true;
-
-            }
-
-        });
         return true;
     }
 
@@ -175,9 +149,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
+        /*if (id == R.id.action_search) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -196,7 +170,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             startActivity(intent);
 
         } else if (id == R.id.nav_account_mdp) {
-            Intent intent = new Intent(MainActivity.this, AccountMDPActivity.class);
+            Intent intent = new Intent(MainActivity.this, AccountActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_logout) {

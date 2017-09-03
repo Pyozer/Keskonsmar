@@ -38,12 +38,14 @@ public class JdmViewHolder extends RecyclerView.ViewHolder {
 
     public void bindToPost(JeuDeMot jdm, View.OnClickListener likeClickListener, View.OnClickListener dislikeClickListener) {
         auteur.setText(jdm.auteur);
-        date.setText(Util.getDateFormated(Long.parseLong(jdm.date)));
+        date.setText(Util.getDateFormated(jdm.timestamp));
         jeuDeMot.setText(jdm.jdm);
-        degre.setText(String.valueOf(jdm.getDegreJdm()) + "°");
 
-        nbLike.setText(String.valueOf(jdm.getNbLikes()));
-        nbDislike.setText(String.valueOf(jdm.getNbDislikes()));
+        String degreStr = String.valueOf(jdm.degreJdm) + "°";
+        degre.setText(degreStr);
+
+        nbLike.setText(String.valueOf(jdm.nbLikes));
+        nbDislike.setText(String.valueOf(jdm.nbDislikes));
 
         like.setOnClickListener(likeClickListener);
         dislike.setOnClickListener(dislikeClickListener);

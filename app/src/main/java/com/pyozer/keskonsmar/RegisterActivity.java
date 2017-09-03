@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,8 +38,6 @@ public class RegisterActivity extends BaseActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-
-    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,16 +168,6 @@ public class RegisterActivity extends BaseActivity {
                 });
     }
 
-    private void onAuthSuccess(FirebaseUser user) {
-        if (user != null) {
-            if(intent == null)
-                intent = new Intent(RegisterActivity.this, MainActivity.class);
-
-            startActivity(intent);
-            finish();
-        }
-    }
-
     private void writeNewUser(String userId, String name, String email) {
         User user = new User(name, email);
 
@@ -190,8 +179,7 @@ public class RegisterActivity extends BaseActivity {
         user.sendEmailVerification().addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                intent = new Intent(RegisterActivity.this, MainActivity.class);
-                intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_email_verif_send));
+                Toast.makeText(RegisterActivity.this, getString(R.string.snackbar_email_verif_send), Toast.LENGTH_LONG).show();
             }
         });
     }

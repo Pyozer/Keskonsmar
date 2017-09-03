@@ -1,8 +1,11 @@
 package com.pyozer.keskonsmar;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseUser;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -26,6 +29,14 @@ public class BaseActivity extends AppCompatActivity {
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
+        }
+    }
+
+    public void onAuthSuccess(FirebaseUser user) {
+        if (user != null) {
+            // Go to MainActivity
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
         }
     }
 

@@ -33,6 +33,12 @@ public abstract class JDMFragment extends Fragment {
     private FirebaseRecyclerAdapter mAdapter;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_jdm, container, false);
 

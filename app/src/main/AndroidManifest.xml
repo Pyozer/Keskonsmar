@@ -13,14 +13,9 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/app_name"
+            android:name=".HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.UI.NoActionBar">
             <intent-filter>
@@ -29,6 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.UI.NoActionBar" />
         <activity
             android:name=".RegisterActivity"
             android:label="@string/activity_title_register"
@@ -39,6 +40,12 @@
             android:label="@string/activity_title_forgot_pass"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.UI.NoActionBar" />
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AboutActivity"
             android:label="@string/activity_title_about"
@@ -56,10 +63,10 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AccountMDPActivity"
-            android:label="@string/activity_title_account_mdp"
+            android:name=".AccountActivity"
+            android:label="@string/activity_title_account"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
-    </application>
 
+    </application>
 </manifest>

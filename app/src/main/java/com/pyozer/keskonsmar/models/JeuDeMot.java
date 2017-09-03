@@ -8,7 +8,7 @@ public class JeuDeMot {
     public String uid;
     public String jdm;
     public String auteur;
-    public String date;
+    public long timestamp;
 
     public Map<String, Boolean> likes = new HashMap<>();
     public Map<String, Boolean> dislikes = new HashMap<>();
@@ -21,21 +21,9 @@ public class JeuDeMot {
     }
 
     public JeuDeMot(String uid, String auteur, String jdm) {
-        this(uid, auteur, jdm, String.valueOf(System.currentTimeMillis()));
-    }
-
-    public JeuDeMot(String uid, String auteur, String jdm, String date) {
         this.uid = uid;
         this.jdm = jdm;
         this.auteur = auteur;
-        this.date = date;
-    }
-
-    public int getNbLikes() {
-        return nbLikes;
-    }
-    public int getNbDislikes() {
-        return nbDislikes;
     }
 
     public void like(String userUID) {
@@ -69,11 +57,7 @@ public class JeuDeMot {
     }
 
     public void setDegreJdm() {
-        degreJdm = getNbLikes() - getNbDislikes();
-    }
-
-    public int getDegreJdm() {
-        return degreJdm;
+        degreJdm = nbLikes - nbDislikes;
     }
 
     public Map<String, Object> toMap() {
@@ -85,8 +69,7 @@ public class JeuDeMot {
         result.put("dislikes", dislikes);
         result.put("nbLikes", nbLikes);
         result.put("nbDislikes", nbDislikes);
-        result.put("degreJdm", getDegreJdm());
-        result.put("date", date);
+        result.put("degreJdm", degreJdm);
 
         return result;
     }

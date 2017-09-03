@@ -64,7 +64,6 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), ForgetPassActivity.class));
-                finish();
             }
         });
 
@@ -148,13 +147,5 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    private void onAuthSuccess(FirebaseUser user) {
-        if (user != null) {
-            // Go to MainActivity
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
-        }
     }
 }

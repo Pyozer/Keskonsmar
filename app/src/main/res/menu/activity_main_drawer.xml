@@ -10,7 +10,7 @@
             <item
                 android:id="@+id/nav_account_mdp"
                 android:icon="@drawable/ic_lock_black_24dp"
-                android:title="@string/activity_title_account_mdp" />
+                android:title="@string/activity_title_account" />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_exit_to_app_black_24dp"

@@ -18,6 +18,6 @@ public class UserJdmFragment extends JDMFragment {
 
     @Override
     public Query getQuery(DatabaseReference databaseReference) {
-        return databaseReference.child("posts");
+        return databaseReference.child("posts").orderByChild("uid").equalTo(mUser);
     }
 }

@@ -9,6 +9,6 @@ public class WorstJdmFragment extends JDMFragment {
 
     @Override
     public Query getQuery(DatabaseReference databaseReference) {
-        return databaseReference.child("posts").orderByChild("dislikesCount");
+        return databaseReference.child("posts").orderByChild("nbDislikes");
     }
 }

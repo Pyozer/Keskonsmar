@@ -9,6 +9,6 @@ public class TopJdmFragment extends JDMFragment {
 
     @Override
     public Query getQuery(DatabaseReference databaseReference) {
-        return databaseReference.child("posts").orderByChild("likesCount");
+        return databaseReference.child("posts").orderByChild("nbLikes");
     }
 }
