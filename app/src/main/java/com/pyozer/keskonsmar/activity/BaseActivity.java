@@ -1,4 +1,4 @@
-package com.pyozer.keskonsmar;
+package com.pyozer.keskonsmar.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.pyozer.keskonsmar.AppConfig;
+import com.pyozer.keskonsmar.R;
 
 public class BaseActivity extends AppCompatActivity {
 

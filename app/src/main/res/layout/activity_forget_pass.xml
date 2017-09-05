@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:fitsSystemWindows="true"
-    tools:context="com.pyozer.keskonsmar.ForgetPassActivity">
+    tools:context="com.pyozer.keskonsmar.activity.ForgetPassActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"

@@ -6,7 +6,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.pyozer.keskonsmar.RegisterActivity">
+    tools:context="com.pyozer.keskonsmar.activity.RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

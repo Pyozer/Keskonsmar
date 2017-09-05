@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".HomeActivity"
+            android:name=".activity.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.UI.NoActionBar">
             <intent-filter>
@@ -26,46 +26,46 @@
         </activity>
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".activity.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.UI.NoActionBar" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activity.RegisterActivity"
             android:label="@string/activity_title_register"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.UI.NoActionBar" />
         <activity
-            android:name=".ForgetPassActivity"
+            android:name=".activity.ForgetPassActivity"
             android:label="@string/activity_title_forgot_pass"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.UI.NoActionBar" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AboutActivity"
+            android:name=".activity.AboutActivity"
             android:label="@string/activity_title_about"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AddJdmActivity"
+            android:name=".activity.AddJdmActivity"
             android:label="@string/activity_title_add_jdm"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AccountJDMActivity"
+            android:name=".activity.AccountJDMActivity"
             android:label="@string/activity_title_account_jdm"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AccountActivity"
+            android:name=".activity.AccountActivity"
             android:label="@string/activity_title_account"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait" />
 
     </application>

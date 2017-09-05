@@ -1,4 +1,4 @@
-package com.pyozer.keskonsmar;
+package com.pyozer.keskonsmar.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.pyozer.keskonsmar.AppConfig;
+import com.pyozer.keskonsmar.R;
 import com.pyozer.keskonsmar.models.User;
 
 public class RegisterActivity extends BaseActivity {

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.pyozer.keskonsmar.AccountJDMActivity">
+    tools:context="com.pyozer.keskonsmar.activity.AccountJDMActivity">
 
 
     <TextView

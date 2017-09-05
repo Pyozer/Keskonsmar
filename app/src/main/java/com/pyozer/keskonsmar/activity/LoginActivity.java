@@ -1,4 +1,4 @@
-package com.pyozer.keskonsmar;
+package com.pyozer.keskonsmar.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.pyozer.keskonsmar.AppConfig;
+import com.pyozer.keskonsmar.R;
 
 public class LoginActivity extends BaseActivity {
 

@@ -1,4 +1,4 @@
-package com.pyozer.keskonsmar;
+package com.pyozer.keskonsmar.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.pyozer.keskonsmar.AppConfig;
+import com.pyozer.keskonsmar.R;
 import com.pyozer.keskonsmar.models.User;
 
 public class AccountActivity extends BaseActivity {

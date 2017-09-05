@@ -1,4 +1,4 @@
-package com.pyozer.keskonsmar;
+package com.pyozer.keskonsmar.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.pyozer.keskonsmar.AppConfig;
+import com.pyozer.keskonsmar.R;
 import com.pyozer.keskonsmar.fragments.LastJdmFragment;
 import com.pyozer.keskonsmar.fragments.TopJdmFragment;
 import com.pyozer.keskonsmar.fragments.WorstJdmFragment;
