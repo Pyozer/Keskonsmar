@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -66,17 +65,8 @@ public class RegisterActivity extends BaseActivity {
             }
         });
 
-        // Session manager
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        onAuthSuccess(currentUser);
     }
 
     private void validateForm() {
@@ -111,7 +101,7 @@ public class RegisterActivity extends BaseActivity {
         }
 
         if (pass.length() < AppConfig.MIN_PASS_LENGTH) {
-            mInputPassword.setError(getString(R.string.register_mdp_tcourt));
+            mInputPassword.setError(String.format(getString(R.string.register_mdp_tcourt), AppConfig.MIN_PASS_LENGTH));
             cancel = true;
         }
         if (!pass.equals(passConf)) {
@@ -119,68 +109,53 @@ public class RegisterActivity extends BaseActivity {
             cancel = true;
         }
 
-        if (!cancel) {
-            registerUser(user, email, pass);
-        }
+        if (!cancel) registerUser(user, email, pass);
     }
 
     private void registerUser(final String username, final String email, final String password) {
 
         showProgressDialog(getString(R.string.register_loader));
 
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        hideProgressDialog();
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                hideProgressDialog();
 
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser userFirebase = mAuth.getCurrentUser();
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "createUserWithEmail:success");
+                    FirebaseUser userFirebase = mAuth.getCurrentUser();
 
-                            // Write new user
-                            writeNewUser(userFirebase.getUid(), username, userFirebase.getEmail());
+                    // On enregistre l'utilisateur sur la Database (pour avoir son pseudo)
+                    writeNewUser(userFirebase.getUid(), username, userFirebase.getEmail());
 
-                            sendEmailVerif(userFirebase);
-
-                            onAuthSuccess(userFirebase);
-                        } else {
-                            String error = getString(R.string.register_failed);
-                            try {
-                                throw task.getException();
-                            } catch (FirebaseAuthWeakPasswordException e) {
-                                error = getString(R.string.error_weak_password);
-                            } catch (FirebaseAuthUserCollisionException e) {
-                                error = getString(R.string.error_user_exists);
-                            } catch (FirebaseAuthEmailException e) {
-                                error = getString(R.string.error_not_email);
-                            } catch (Exception e) {
-                                error = e.getMessage();
-                            }
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-
-                            mSnackbar = Snackbar.make(mRegisterLayout, error, Snackbar.LENGTH_LONG);
-                            mSnackbar.show();
-                        }
+                    onAuthSuccess(userFirebase);
+                } else {
+                    String error = getString(R.string.register_failed);
+                    try {
+                        throw task.getException();
+                    } catch (FirebaseAuthWeakPasswordException e) {
+                        error = getString(R.string.error_weak_password);
+                    } catch (FirebaseAuthUserCollisionException e) {
+                        error = getString(R.string.error_user_exists);
+                    } catch (FirebaseAuthEmailException e) {
+                        error = getString(R.string.error_not_email);
+                    } catch (Exception e) {
+                        error = e.getMessage();
                     }
-                });
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+
+                    mSnackbar = Snackbar.make(mRegisterLayout, error, Snackbar.LENGTH_LONG);
+                    mSnackbar.show();
+                }
+            }
+        });
     }
 
     private void writeNewUser(String userId, String name, String email) {
         User user = new User(name, email);
 
         mDatabase.child("users").child(userId).setValue(user);
-    }
-
-    private void sendEmailVerif(FirebaseUser user) {
-        // Send verification email
-        user.sendEmailVerification().addOnCompleteListener(this, new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(RegisterActivity.this, getString(R.string.snackbar_email_verif_send), Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }

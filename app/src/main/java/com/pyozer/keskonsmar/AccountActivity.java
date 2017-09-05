@@ -39,7 +39,6 @@ public class AccountActivity extends BaseActivity {
 
     private AlertDialog.Builder builder;
 
-    private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private DatabaseReference mDatabase;
 
@@ -48,7 +47,9 @@ public class AccountActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        mAuth = FirebaseAuth.getInstance();
+        super.redirectToLogin = true; // On spécifie qu'il faut être connecté pour accéder ici
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mAccountLayout = findViewById(R.id.account_layout);
@@ -82,10 +83,13 @@ public class AccountActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                TextView pseudoText = findViewById(R.id.account_pseudo_text);
-                TextView emailText = findViewById(R.id.account_email_text);
-                pseudoText.setText(user.username);
-                emailText.setText(user.email);
+                if (user != null) {
+                    TextView pseudoText = findViewById(R.id.account_pseudo_text);
+                    TextView emailText = findViewById(R.id.account_email_text);
+
+                    pseudoText.setText(user.username);
+                    emailText.setText(user.email);
+                }
             }
 
             @Override
@@ -93,20 +97,6 @@ public class AccountActivity extends BaseActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        mUser = mAuth.getCurrentUser();
-        if (mUser == null) {
-            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
-            intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_not_login));
-            startActivity(intent);
-            finish();
-        }
     }
 
     private void editPseudo() {
@@ -162,27 +152,7 @@ public class AccountActivity extends BaseActivity {
                     mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_field_required), Snackbar.LENGTH_LONG);
                     mSnackbar.show();
                 } else {
-                    mUser.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                mDatabase.child("users").child(mUser.getUid()).child("email").setValue(newEmail);
-
-                                mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.account_new_email_success), Snackbar.LENGTH_LONG);
-                                mSnackbar.show();
-                                Log.d(TAG, "User email address updated.");
-                            } else {
-                                String error = getString(R.string.error_http);
-                                try {
-                                    throw task.getException();
-                                } catch (Exception e) {
-                                    error = e.getMessage();
-                                }
-                                mSnackbar = Snackbar.make(mAccountLayout, error, Snackbar.LENGTH_LONG);
-                                mSnackbar.show();
-                            }
-                        }
-                    });
+                    changeEmail(newEmail);
                 }
             }
         });
@@ -194,6 +164,31 @@ public class AccountActivity extends BaseActivity {
         });
 
         builder.show();
+    }
+
+    private void changeEmail(final String newEmail) {
+        mUser.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    mDatabase.child("users").child(mUser.getUid()).child("email").setValue(newEmail);
+
+                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.account_new_email_success), Snackbar.LENGTH_LONG);
+                    mSnackbar.show();
+
+                    Log.d(TAG, "User email address updated.");
+                } else {
+                    String error;
+                    try {
+                        throw task.getException();
+                    } catch (Exception e) {
+                        error = e.getMessage();
+                    }
+                    mSnackbar = Snackbar.make(mAccountLayout, error, Snackbar.LENGTH_LONG);
+                    mSnackbar.show();
+                }
+            }
+        });
     }
 
     private void editPassword() {
@@ -212,56 +207,7 @@ public class AccountActivity extends BaseActivity {
         builder.setPositiveButton("Valider", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                inputMdp.setError(null);
-                inputMdpConf.setError(null);
-
-                String newMdp = inputMdp.getText().toString().trim();
-                String newMdpConf = inputMdpConf.getText().toString().trim();
-
-                boolean isCancel = false;
-
-                if (!newMdp.equals(newMdpConf)) {
-                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.register_mdp_dif), Snackbar.LENGTH_LONG);
-                    isCancel = true;
-                }
-                if (newMdp.length() < AppConfig.MIN_PASS_LENGTH) {
-                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.register_mdp_tcourt), Snackbar.LENGTH_LONG);
-                    isCancel = true;
-                }
-                if (TextUtils.isEmpty(newMdpConf)) {
-                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_field_required), Snackbar.LENGTH_LONG);
-                    isCancel = true;
-                }
-                if (TextUtils.isEmpty(newMdp)) {
-                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_field_required), Snackbar.LENGTH_LONG);
-                    isCancel = true;
-                }
-
-                if (isCancel) {
-                    mSnackbar.show();
-                } else {
-                    mUser.updatePassword(newMdp).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.account_new_mdp_success), Snackbar.LENGTH_LONG);
-                                mSnackbar.show();
-                                Log.d(TAG, "User password updated.");
-                            } else {
-                                String error = getString(R.string.error_http);
-                                try {
-                                    throw task.getException();
-                                } catch (FirebaseAuthWeakPasswordException e) {
-                                    error = getString(R.string.error_weak_password);
-                                } catch (Exception e) {
-                                    error = e.getMessage();
-                                }
-                                mSnackbar = Snackbar.make(mAccountLayout, error, Snackbar.LENGTH_LONG);
-                                mSnackbar.show();
-                            }
-                        }
-                    });
-                }
+                checkPasswordForm(inputMdp, inputMdpConf);
             }
         });
         builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -272,5 +218,62 @@ public class AccountActivity extends BaseActivity {
         });
 
         builder.show();
+    }
+
+    private void checkPasswordForm(EditText inputMdp, EditText inputMdpConf) {
+        inputMdp.setError(null);
+        inputMdpConf.setError(null);
+
+        String newMdp = inputMdp.getText().toString().trim();
+        String newMdpConf = inputMdpConf.getText().toString().trim();
+
+        boolean isCancel = false;
+
+        if (TextUtils.isEmpty(newMdp)) {
+            mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_field_required), Snackbar.LENGTH_LONG);
+            isCancel = true;
+        }
+        if (TextUtils.isEmpty(newMdpConf)) {
+            mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.error_field_required), Snackbar.LENGTH_LONG);
+            isCancel = true;
+        }
+        if (newMdp.length() < AppConfig.MIN_PASS_LENGTH) {
+            mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.register_mdp_tcourt), Snackbar.LENGTH_LONG);
+            isCancel = true;
+        }
+        if (!newMdp.equals(newMdpConf)) {
+            mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.register_mdp_dif), Snackbar.LENGTH_LONG);
+            isCancel = true;
+        }
+
+        if (isCancel) {
+            mSnackbar.show();
+        } else {
+            changePassword(newMdp);
+        }
+    }
+
+    private void changePassword(String newPassword) {
+        mUser.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.account_new_mdp_success), Snackbar.LENGTH_LONG);
+                    mSnackbar.show();
+                    Log.d(TAG, "User password updated.");
+                } else {
+                    String error;
+                    try {
+                        throw task.getException();
+                    } catch (FirebaseAuthWeakPasswordException e) {
+                        error = getString(R.string.error_weak_password);
+                    } catch (Exception e) {
+                        error = e.getMessage();
+                    }
+                    mSnackbar = Snackbar.make(mAccountLayout, error, Snackbar.LENGTH_LONG);
+                    mSnackbar.show();
+                }
+            }
+        });
     }
 }

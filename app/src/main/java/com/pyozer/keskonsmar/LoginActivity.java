@@ -20,9 +20,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
-/**
- * A login screen that offers login via email/password.
- */
 public class LoginActivity extends BaseActivity {
 
     private final static String TAG = "LoginActivity";
@@ -77,14 +74,6 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        onAuthSuccess(currentUser);
-    }
-
     private void validateForm() {
         // Reset errors.
         mInputEmail.setError(null);
@@ -105,9 +94,7 @@ public class LoginActivity extends BaseActivity {
             cancel = true;
         }
 
-        if (!cancel) {
-            loginUser(user, password);
-        }
+        if (!cancel) loginUser(user, password);
     }
 
     private void loginUser(final String username, final String password) {
@@ -123,8 +110,7 @@ public class LoginActivity extends BaseActivity {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success");
 
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    onAuthSuccess(user);
+                    onAuthSuccess(mAuth.getCurrentUser());
                 } else {
                     String error = getString(R.string.error_login_failed);
                     try {
@@ -138,7 +124,6 @@ public class LoginActivity extends BaseActivity {
                     } catch (Exception e) {
                         error = e.getMessage();
                     }
-
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.getException());
 

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +35,7 @@ public class AddJdmActivity extends BaseActivity {
 
     private Snackbar mSnackbar;
 
+    private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
     @Override
@@ -41,11 +43,13 @@ public class AddJdmActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_jdm);
 
-        mAddJdmLayout = (LinearLayout) findViewById(R.id.add_jdm_layout);
+        super.redirectToLogin = true;
 
-        mInputJdm = (EditText) findViewById(R.id.add_input_jdm);
+        mAddJdmLayout = findViewById(R.id.add_jdm_layout);
 
-        mSubmitButton = (Button) findViewById(R.id.add_action_submit);
+        mInputJdm = findViewById(R.id.add_input_jdm);
+
+        mSubmitButton = findViewById(R.id.add_action_submit);
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,60 +66,62 @@ public class AddJdmActivity extends BaseActivity {
             }
         });
 
+        mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     private void addNewJdm() {
         mInputJdm.setError(null);
 
-        final String jdm = mInputJdm.getText().toString().trim();
+        String jdm = mInputJdm.getText().toString().trim();
 
         if (TextUtils.isEmpty(jdm)) {
             mInputJdm.setError(getString(R.string.error_field_required));
-
-            return;
+        } else {
+            sendNewJdm(jdm);
         }
+    }
+
+    private void sendNewJdm(final String jdm) {
         setEditingEnabled(false);
 
-        // [START single_value_read]
-        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String userId = mAuth.getCurrentUser().getUid();
 
-        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Get user value
-                        User user = dataSnapshot.getValue(User.class);
+        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get user value
+                User user = dataSnapshot.getValue(User.class);
 
-                        if (user == null) {
-                            // User is null, error out
-                            Log.e(TAG, "User " + userId + " is unexpectedly null");
+                if (user == null) {
+                    // User is null, error out
+                    Log.e(TAG, "User " + userId + " is unexpectedly null");
 
-                            mSnackbar = Snackbar.make(mAddJdmLayout, "Impossible de trouver l'utilisateur", Snackbar.LENGTH_LONG);
-                            mSnackbar.show();
-                        } else {
-                            // Write new post
-                            writeNewPost(userId, user, jdm);
-                        }
+                    mSnackbar = Snackbar.make(mAddJdmLayout, getString(R.string.error_account_unknown), Snackbar.LENGTH_LONG);
+                    mSnackbar.show();
+                } else {
+                    // Write new post
+                    writeNewPost(userId, user, jdm);
+                }
 
-                        // Finish this Activity, back to the stream
-                        setEditingEnabled(true);
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
+                // Finish this Activity, back to the stream
+                setEditingEnabled(true);
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
 
-                        setEditingEnabled(true);
-                    }
-                });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+
+                setEditingEnabled(true);
+            }
+        });
     }
 
     private void writeNewPost(String userId, User user, String jdm) {
-        // Create new post at /posts/$postid
         String key = mDatabase.child("posts").push().getKey();
         JeuDeMot jeuDeMot = new JeuDeMot(userId, user.username, jdm);
 
@@ -136,5 +142,4 @@ public class AddJdmActivity extends BaseActivity {
             mSubmitButton.setVisibility(View.GONE);
         }
     }
-
 }

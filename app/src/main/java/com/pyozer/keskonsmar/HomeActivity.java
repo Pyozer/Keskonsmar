@@ -3,7 +3,6 @@ package com.pyozer.keskonsmar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -27,13 +26,4 @@ public class HomeActivity extends BaseActivity {
             }
         });
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        onAuthSuccess(currentUser);
-    }
-
 }

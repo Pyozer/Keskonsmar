@@ -12,8 +12,4 @@ public class User {
         this.username = username;
         this.email = email;
     }
-
-    public String toString() {
-        return "@" + username;
-    }
 }

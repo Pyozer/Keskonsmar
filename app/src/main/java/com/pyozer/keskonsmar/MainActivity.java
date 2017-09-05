@@ -31,10 +31,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private Fragment mFragment;
     private FragmentManager mFragmentManager;
 
-    private int lastFragmentLoad = R.id.navigation_recent;
+    private FirebaseAuth mAuth;
 
-    private CoordinatorLayout mCoordLayout;
-    private Snackbar mSnackbar;
+    private int lastFragmentLoad = R.id.navigation_recent;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -43,26 +42,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_recent:
-                    if (item.getItemId() != lastFragmentLoad) {
+                    if (item.getItemId() != lastFragmentLoad)
                         mFragment = new LastJdmFragment();
-                    }
                     break;
                 case R.id.navigation_trending:
-                    if (item.getItemId() != lastFragmentLoad) {
+                    if (item.getItemId() != lastFragmentLoad)
                         mFragment = new TopJdmFragment();
-                    }
                     break;
                 case R.id.navigation_worst:
-                    if (item.getItemId() != lastFragmentLoad) {
+                    if (item.getItemId() != lastFragmentLoad)
                         mFragment = new WorstJdmFragment();
-                    }
                     break;
             }
             lastFragmentLoad = item.getItemId();
             loadFragment(mFragment);
             return true;
         }
-
     };
 
     @Override
@@ -70,12 +65,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        super.redirectToLogin = true; // On spécifie qu'il faut être connecté pour accéder ici
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mFragmentManager = getSupportFragmentManager();
 
-        mCoordLayout = findViewById(R.id.coordinatorlayout);
+        CoordinatorLayout mCoordLayout = findViewById(R.id.coordinatorlayout);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -98,25 +95,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        mAuth = FirebaseAuth.getInstance();
+
         loadFragment(new LastJdmFragment());
 
         String extrasValue = getIntent().getStringExtra(AppConfig.INTENT_EXTRA_KEY);
         if (extrasValue != null) {
-            mSnackbar = Snackbar.make(mCoordLayout, extrasValue, Snackbar.LENGTH_LONG);
+            Snackbar mSnackbar = Snackbar.make(mCoordLayout, extrasValue, Snackbar.LENGTH_LONG);
             mSnackbar.show();
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(currentUser == null) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.snackbar_not_login));
-            startActivity(intent);
-            finish();
         }
     }
 
@@ -133,27 +119,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_search) {
-            return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -174,8 +139,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             startActivity(intent);
 
         } else if (id == R.id.nav_logout) {
-            // Session manager
-            FirebaseAuth mAuth = FirebaseAuth.getInstance();
             mAuth.signOut();
 
             showProgressDialog(getString(R.string.logout_loader));
@@ -189,10 +152,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     startActivity(intent);
                     finish();
                 }
-            }, 1500);
+            }, 1000);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

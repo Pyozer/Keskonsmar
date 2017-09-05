@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "31941824345-siplloc5eh47el3hecf45clkp4p437of.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pyozer.keskonsmar",
+            "certificate_hash": "457df6334337ffe5eef3c9ab23e6cd85e5a27a23"
+          }
+        },
+        {
           "client_id": "31941824345-vke85q3gvksgl1e35rkelrdagsgaj6ge.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
