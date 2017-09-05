@@ -2,11 +2,13 @@ package com.pyozer.keskonsmar.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.pyozer.keskonsmar.AppConfig;
 import com.pyozer.keskonsmar.R;
 
@@ -16,6 +18,22 @@ public class BaseActivity extends AppCompatActivity {
     public ProgressDialog mProgressDialog;
 
     public boolean redirectToLogin = false;
+
+    static boolean isInitialized = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        try{
+            if(!isInitialized){
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+                isInitialized = true;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onStart() {

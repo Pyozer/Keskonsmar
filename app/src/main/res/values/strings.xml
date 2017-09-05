@@ -31,6 +31,9 @@
     <string name="error_user_exists">L\'utilisateur existe déjà !</string>
     <string name="error_login_failed">Identifiants incorrects !</string>
 
+    <string name="jdm_empty">Aucun JDM trouvé</string>
+    <string name="jdm_empty_text">Il n\'y a aucun JDM trouvé ici… alors postez-en un !</string>
+
 
     <!-- AJOUT JDM -->
     <string name="add_title">Ajouter un JDM</string>
@@ -85,7 +88,6 @@
     <string name="account_new_email_loader">Changement de votre adresse mail…</string>
     <string name="account_new_email_success">Votre adresse mail a bien été changé.</string>
     <string name="account_new_pseudo">Nouveau pseudo</string>
-    <string name="account_new_pseudo_success">Votre pseudo a bien été changé.</string>
 
     <!-- A PROPOS -->
     <string name="about_whatIsIt">Qu\'est-ce que c\'est</string>

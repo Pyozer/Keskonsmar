@@ -86,9 +86,6 @@ public class AccountActivity extends BaseActivity {
 
                     pseudoText.setText(user.username);
                     emailText.setText(user.email);
-
-                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.account_new_pseudo_success), Snackbar.LENGTH_LONG);
-                    mSnackbar.show();
                 }
             }
 

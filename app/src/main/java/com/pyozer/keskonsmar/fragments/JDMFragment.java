@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.pyozer.keskonsmar.R;
 import com.pyozer.keskonsmar.models.JeuDeMot;
 import com.pyozer.keskonsmar.viewholder.JdmViewHolder;
@@ -34,6 +37,9 @@ public abstract class JDMFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private FirebaseRecyclerAdapter mAdapter;
 
+    private ProgressBar mSpinner;
+    private CardView mJdmEmpty;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +51,19 @@ public abstract class JDMFragment extends Fragment {
         View mView = inflater.inflate(R.layout.fragment_jdm, container, false);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.keepSynced(true);
 
         mRecyclerView = mView.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+
+        mJdmEmpty = mView.findViewById(R.id.jdm_empty);
+
+        mSpinner = mView.findViewById(R.id.loader);
+        showElement(mSpinner);
+        hideElement(mRecyclerView);
+        hideElement(mJdmEmpty);
 
         return mView;
     }
@@ -147,6 +161,24 @@ public abstract class JDMFragment extends Fragment {
                 });
             }
         };
+        postsQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                hideElement(mSpinner);
+                if(!dataSnapshot.exists()) {
+                    showElement(mJdmEmpty);
+                    hideElement(mRecyclerView);
+                } else {
+                    showElement(mRecyclerView);
+                    hideElement(mJdmEmpty);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                throw databaseError.toException();
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -181,6 +213,13 @@ public abstract class JDMFragment extends Fragment {
     }
 
     public abstract Query getQuery(DatabaseReference databaseReference);
+
+    private void showElement(View elem) {
+        elem.setVisibility(View.VISIBLE);
+    }
+    private void hideElement(View elem) {
+        elem.setVisibility(View.GONE);
+    }
 
     @Override
     public void onDestroy() {
