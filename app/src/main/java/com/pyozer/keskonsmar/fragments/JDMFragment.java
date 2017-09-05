@@ -42,9 +42,7 @@ public abstract class JDMFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_jdm, container, false);
 
-        // [START create_database_reference]
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        // [END create_database_reference]
 
         mRecyclerView = mView.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -67,7 +65,6 @@ public abstract class JDMFragment extends Fragment {
         // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = getQuery(mDatabase);
         mAdapter = new FirebaseRecyclerAdapter<JeuDeMot, JdmViewHolder>(JeuDeMot.class, R.layout.jeu_de_mot_row, JdmViewHolder.class, postsQuery) {
-
             @Override
             protected void populateViewHolder(final JdmViewHolder viewHolder, final JeuDeMot model, final int position) {
                 final DatabaseReference postRef = getRef(position);
