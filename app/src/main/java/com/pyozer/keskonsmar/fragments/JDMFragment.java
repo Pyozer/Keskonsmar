@@ -1,7 +1,9 @@
 package com.pyozer.keskonsmar.fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -79,6 +81,15 @@ public abstract class JDMFragment extends Fragment {
                     viewHolder.dislike.setColorFilter(getResources().getColor(R.color.dislikeColor));
                 }
 
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.i(TAG, "onItemClickGeneral: position " + position);
+
+                        showDeleteAlert(postRef.getKey(), model);
+                    }
+                });
+
                 // Bind Post to ViewHolder, setting OnClickListener for the star button
                 viewHolder.bindToPost(model, new View.OnClickListener() {
 
@@ -137,6 +148,32 @@ public abstract class JDMFragment extends Fragment {
             }
         };
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void showDeleteAlert(final String postKey, final JeuDeMot jeuDeMot) {
+        if (jeuDeMot.uid.equals(getUid())) {
+
+            AlertDialog.Builder alertDelete = new AlertDialog.Builder(getContext());
+            alertDelete.setTitle("Supprimer le JDM");
+            alertDelete.setMessage("Voulez-vous vraiment supprimer ce JDM ?");
+            alertDelete.setCancelable(true);
+
+            alertDelete.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    mDatabase.child("posts").child(postKey).removeValue();
+                    dialog.cancel();
+                }
+            });
+
+            alertDelete.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog alert = alertDelete.create();
+            alert.show();
+        }
     }
 
     public String getUid() {
