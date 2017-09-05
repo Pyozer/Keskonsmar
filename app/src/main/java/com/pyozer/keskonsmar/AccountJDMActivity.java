@@ -1,13 +1,10 @@
 package com.pyozer.keskonsmar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.pyozer.keskonsmar.fragments.JDMFragment;
 import com.pyozer.keskonsmar.fragments.UserJdmFragment;
 
