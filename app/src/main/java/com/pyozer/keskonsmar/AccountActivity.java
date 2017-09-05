@@ -84,6 +84,9 @@ public class AccountActivity extends BaseActivity {
 
                     pseudoText.setText(user.username);
                     emailText.setText(user.email);
+
+                    mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.account_new_pseudo_success), Snackbar.LENGTH_LONG);
+                    mSnackbar.show();
                 }
             }
 
@@ -162,9 +165,13 @@ public class AccountActivity extends BaseActivity {
     }
 
     private void changeEmail(final String newEmail) {
+        showProgressDialog(getString(R.string.account_new_email_loader));
+
         mUser.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                hideProgressDialog();
+
                 if (task.isSuccessful()) {
                     mDatabase.child("users").child(mUser.getUid()).child("email").setValue(newEmail);
 
@@ -249,9 +256,12 @@ public class AccountActivity extends BaseActivity {
     }
 
     private void changePassword(String newPassword) {
+        showProgressDialog(getString(R.string.account_new_mdp_loader));
+
         mUser.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                hideProgressDialog();
                 if (task.isSuccessful()) {
                     mSnackbar = Snackbar.make(mAccountLayout, getString(R.string.account_new_mdp_success), Snackbar.LENGTH_LONG);
                     mSnackbar.show();

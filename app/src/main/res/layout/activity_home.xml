@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Bienvenue sur Keskonsmar"
+        android:text="@string/app_home"
         android:textAlignment="center"
         style="@style/Base.TextAppearance.AppCompat.Large"/>
 
@@ -35,7 +35,7 @@
         android:layout_below="@+id/home_welcome"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Retrouve ici un maximum de jeux de mots et blagues plus ou moins drôles !"
+        android:text="@string/app_slogan"
         style="@style/Base.TextAppearance.AppCompat.Medium"
         android:textAlignment="center"/>
 
@@ -46,14 +46,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
-        android:text="Connexion"
+        android:text="@string/activity_title_login"
         style="@style/Widget.AppCompat.Button.Borderless"/>
 
     <Button
         android:id="@+id/home_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Inscription"
+        android:text="@string/activity_title_register"
         android:layout_above="@id/home_login"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"

@@ -1,21 +1,22 @@
 <resources>
     <string name="app_name">Keskonsmar</string>
-    <string name="app_slogan">Après tout c\'est pas si drôle</string>
+    <string name="app_home">Bienvenue sur Keskonsmar !</string>
+    <string name="app_slogan">Retrouve ici un maximum de jeux de mots et blagues plus ou moins drôles !</string>
 
     <string name="img_desc">Logo de Keskonsmar</string>
+    <string name="icon_like">Icone j\'aime</string>
+    <string name="icon_dislike">Icone j\'aime pas</string>
 
     <!-- MENU DU BAS -->
     <string name="title_recent">Nouveaux</string>
     <string name="title_trending">Tendances</string>
     <string name="title_worst">Les plus nul</string>
 
-    <string name="action_search">Rechercher</string>
-
 
     <!-- TITRES ACTIVITES -->
     <string name="activity_title_add_jdm">Nouveau JDM</string>
-    <string name="activity_title_login">Connexion</string>
     <string name="activity_title_register">Inscription</string>
+    <string name="activity_title_login">Connexion</string>
     <string name="activity_title_forgot_pass">Mot de passe oublié</string>
     <string name="activity_title_about">A propos</string>
     <string name="activity_title_account_jdm">Mes JDM</string>
@@ -23,9 +24,6 @@
 
 
     <!-- ERREURS -->
-    <string name="no_internet">Aucune connexion internet !</string>
-    <string name="error_http">Erreur lors du chargement des données :/</string>
-    <string name="error_incorrect_password">Ce mot de passe est incorrect.</string>
     <string name="error_field_required">Ce champs de texte est obligatoire.</string>
     <string name="error_account_unknown">Le compte auquelle vous êtes connecté n\'est pas reconnu :/</string>
     <string name="error_not_email">Format de l\'email incorrect !</string>
@@ -39,13 +37,11 @@
     <string name="add_input_jdm">Votre jeu de mot</string>
     <string name="add_action_submit">Valider</string>
     <string name="add_action_cancel">Annuler</string>
-    <string name="add_error">Vous n\'avez pas rentré de JDM</string>
     <string name="add_send_success">Votre JDM a bien été envoyé !</string>
     <string name="add_send_loader">Envoie en cours…</string>
 
 
     <!-- CONNEXION -->
-    <string name="login_title">Connexion</string>
     <string name="login_label_email">Adresse mail</string>
     <string name="login_label_password">Mot de passe</string>
     <string name="login_action_submit">Connexion</string>
@@ -55,7 +51,6 @@
 
 
     <!-- INSCRIPTION -->
-    <string name="register_title">Inscription</string>
     <string name="register_label_email">Adresse mail</string>
     <string name="register_label_user">Pseudo</string>
     <string name="register_label_password">Mot de passe</string>
@@ -63,7 +58,6 @@
     <string name="register_action_submit">S\'inscrire</string>
     <string name="register_mdp_dif">Les mots de passe doivent être identiques.</string>
     <string name="register_mdp_tcourt">Votre mot de passe doit contenir au moins %1$d caractères.</string>
-    <string name="register_champ_vide">Il faut remplir toutes les champs de texte.</string>
     <string name="register_link_login">Déjà membre ? Connectez-vous.</string>
     <string name="register_loader">Inscription en cours…</string>
     <string name="register_failed">Inscription échoué !</string>
@@ -81,7 +75,6 @@
     <!-- DECONNEXION -->
     <string name="snackbar_logout_success">Vous êtes à présent déconnecté.</string>
     <string name="snackbar_not_login">Vous devez être connecté !</string>
-    <string name="snackbar_email_verif_send">Un email de vérification vous a été envoyé !</string>
 
     <!-- MODIFIER MOT DE PASSE -->
     <string name="account_new_mdp">Nouveau mot de passe</string>
@@ -89,6 +82,7 @@
     <string name="account_new_mdp_loader">Changement de votre mot de passe…</string>
     <string name="account_new_mdp_success">Votre mot de passe a bien été changé.</string>
     <string name="account_new_email">Nouvelle adresse mail</string>
+    <string name="account_new_email_loader">Changement de votre adresse mail…</string>
     <string name="account_new_email_success">Votre adresse mail a bien été changé.</string>
     <string name="account_new_pseudo">Nouveau pseudo</string>
     <string name="account_new_pseudo_success">Votre pseudo a bien été changé.</string>

@@ -30,9 +30,4 @@
     <color name="likeColor">#2260cc</color>
     <color name="dislikeColor">#F44336</color>
 
-    <color name="md_red_500">#F44336</color>
-    <color name="md_indigo_500">#3F51B5</color>
-    <color name="md_lime_500">#CDDC39</color>
-    <color name="md_orange_500">#FF9800</color>
-
 </resources>

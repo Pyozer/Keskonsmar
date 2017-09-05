@@ -86,9 +86,12 @@ public class AddJdmActivity extends BaseActivity {
 
         final String userId = mAuth.getCurrentUser().getUid();
 
+        showProgressDialog(getString(R.string.add_send_loader));
+
         mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                hideProgressDialog();
                 // Get user value
                 User user = dataSnapshot.getValue(User.class);
 
@@ -107,6 +110,7 @@ public class AddJdmActivity extends BaseActivity {
                 setEditingEnabled(true);
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra(AppConfig.INTENT_EXTRA_KEY, getString(R.string.add_send_success));
                 startActivity(intent);
                 finish();
             }
